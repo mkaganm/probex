@@ -1,0 +1,118 @@
+{
+  "name": "probex",
+  "displayName": "PROBEX — API Intelligence Engine",
+  "description": "Zero-Test API Intelligence Engine — scan, test, and monitor your APIs from VS Code",
+  "version": "1.0.0",
+  "publisher": "probex",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/probex/probex"
+  },
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Testing",
+    "Other"
+  ],
+  "keywords": [
+    "api",
+    "testing",
+    "rest",
+    "graphql",
+    "grpc",
+    "security"
+  ],
+  "activationEvents": [
+    "onCommand:probex.scan",
+    "onCommand:probex.run",
+    "onCommand:probex.watch",
+    "onCommand:probex.dashboard",
+    "workspaceContains:probex.yaml"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "probex.scan",
+        "title": "PROBEX: Scan API",
+        "icon": "$(search)"
+      },
+      {
+        "command": "probex.run",
+        "title": "PROBEX: Run Tests",
+        "icon": "$(play)"
+      },
+      {
+        "command": "probex.watch",
+        "title": "PROBEX: Watch Mode",
+        "icon": "$(eye)"
+      },
+      {
+        "command": "probex.dashboard",
+        "title": "PROBEX: Open Dashboard",
+        "icon": "$(dashboard)"
+      },
+      {
+        "command": "probex.init",
+        "title": "PROBEX: Initialize Config"
+      },
+      {
+        "command": "probex.graph",
+        "title": "PROBEX: Show Endpoint Graph"
+      }
+    ],
+    "configuration": {
+      "title": "PROBEX",
+      "properties": {
+        "probex.serverUrl": {
+          "type": "string",
+          "default": "http://localhost:9712",
+          "description": "PROBEX server URL"
+        },
+        "probex.binaryPath": {
+          "type": "string",
+          "default": "probex",
+          "description": "Path to the probex binary"
+        },
+        "probex.autoScan": {
+          "type": "boolean",
+          "default": false,
+          "description": "Automatically scan when opening a project with probex.yaml"
+        }
+      }
+    },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "probex",
+          "title": "PROBEX",
+          "icon": "$(beaker)"
+        }
+      ]
+    },
+    "views": {
+      "probex": [
+        {
+          "id": "probex.endpoints",
+          "name": "Endpoints"
+        },
+        {
+          "id": "probex.results",
+          "name": "Test Results"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "@types/vscode": "^1.85.0",
+    "typescript": "^5.3.0"
+  }
+}

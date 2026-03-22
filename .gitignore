@@ -1,0 +1,75 @@
+# Binaries
+bin/
+core/probex
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Go
+*.test
+*.out
+vendor/
+coverage.txt
+coverage.html
+
+# Probex data
+.probex/
+probex.yaml
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Node (sdk-js)
+node_modules/
+dist/
+*.tgz
+sdk-js/coverage/
+
+# Java (sdk-java)
+target/
+*.class
+*.jar
+!sdk-java/**/src/**/*.jar
+sdk-java/.gradle/
+
+# Kotlin (sdk-kotlin)
+sdk-kotlin/.gradle/
+sdk-kotlin/build/
+sdk-kotlin/out/
+
+# Python (brain)
+__pycache__/
+*.pyc
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+brain/.pytest_cache/
+
+# Docker
+.docker/
+
+# Environment
+.env
+.env.local
+.env.*
+
+# Personal notes
+fikirler/
+
+# GoReleaser
+dist/
+
+# Coverage / Reports
+*.html
+!docs/**/*.html
+!docker/**

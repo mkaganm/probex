@@ -1,0 +1,45 @@
+# Docker Compose for PROBEX
+#
+# Start everything:     docker compose -f docker/docker-compose.yml up -d
+# Run a scan:           docker compose -f docker/docker-compose.yml exec probex probex scan https://api.example.com
+# View dashboard:       http://localhost:9712/dashboard
+# Stop:                 docker compose -f docker/docker-compose.yml down
+
+services:
+  # PROBEX server (Go CLI in serve mode + Python brain)
+  probex:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    command: ["serve", "--listen", "0.0.0.0:9712"]
+    ports:
+      - "9712:9712"
+    environment:
+      - PROBEX_AI_MODE=local
+      - PROBEX_LOCAL_MODEL=qwen3:4b
+    volumes:
+      - probex-data:/root/.probex
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "probex", "--version"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  # Optional: standalone Python AI brain service
+  brain:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    command: ["python", "-m", "probex_brain.server", "--host", "0.0.0.0", "--port", "9711"]
+    ports:
+      - "9711:9711"
+    environment:
+      - PROBEX_AI_MODE=local
+      - PROBEX_LOCAL_MODEL=qwen3:4b
+    profiles:
+      - ai
+    restart: unless-stopped
+
+volumes:
+  probex-data:

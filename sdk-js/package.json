@@ -1,0 +1,24 @@
+{
+  "name": "@probex/sdk",
+  "version": "0.5.0",
+  "description": "PROBEX SDK for JavaScript/TypeScript — Zero-Test API Intelligence",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run",
+    "lint": "eslint src/"
+  },
+  "keywords": ["api", "testing", "security", "probex"],
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {
+    "typescript": "^5.7.0",
+    "vitest": "^3.0.0",
+    "@types/node": "^22.0.0"
+  },
+  "files": ["dist/", "README.md"],
+  "engines": {
+    "node": ">=18"
+  }
+}

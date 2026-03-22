@@ -1,0 +1,48 @@
+name: 'PROBEX API Test'
+description: 'Run PROBEX API tests against your API'
+inputs:
+  target-url:
+    description: 'The base URL of the API to test'
+    required: true
+  fail-on:
+    description: 'Comma-separated severity levels that cause failure'
+    required: false
+    default: 'critical,high'
+  categories:
+    description: 'Comma-separated test categories to run'
+    required: false
+  probex-version:
+    description: 'PROBEX version to install'
+    required: false
+    default: 'latest'
+outputs:
+  total:
+    description: 'Total number of tests'
+  passed:
+    description: 'Number of passed tests'
+  failed:
+    description: 'Number of failed tests'
+  report:
+    description: 'Path to the generated report'
+runs:
+  using: 'composite'
+  steps:
+    - name: Install PROBEX
+      shell: bash
+      run: |
+        echo "Installing PROBEX..."
+        # Download probex binary
+        # For now, assume it's available in PATH
+    - name: Scan API
+      shell: bash
+      run: probex scan ${{ inputs.target-url }}
+    - name: Run Tests
+      shell: bash
+      id: test
+      run: |
+        probex guard --ci --fail-on ${{ inputs.fail-on }} --report junit:probex-results.xml
+      continue-on-error: true
+    - name: Set outputs
+      shell: bash
+      run: |
+        echo "report=probex-results.xml" >> $GITHUB_OUTPUT
