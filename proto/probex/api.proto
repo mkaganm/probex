@@ -1,0 +1,104 @@
+syntax = "proto3";
+
+package probex.api;
+
+option go_package = "github.com/probex/probex/proto/api";
+
+// ProbexAPI defines the external API for SDKs and integrations.
+// This is the gRPC equivalent of the REST API served by `probex serve`.
+service ProbexAPI {
+  // Check server health.
+  rpc Health(Empty) returns (HealthResponse);
+
+  // Scan an API target and discover endpoints.
+  rpc Scan(ScanRequest) returns (ScanResponse);
+
+  // Get the current API profile.
+  rpc GetProfile(Empty) returns (ProfileResponse);
+
+  // Generate and run tests.
+  rpc Run(RunRequest) returns (RunResponse);
+
+  // Get the latest test results.
+  rpc GetResults(Empty) returns (RunResponse);
+
+  // Get a specific run by ID.
+  rpc GetRunByID(GetRunRequest) returns (RunResponse);
+}
+
+message Empty {}
+
+message HealthResponse {
+  string status = 1;
+  string version = 2;
+}
+
+// --- Scan ---
+
+message ScanRequest {
+  string base_url = 1;
+  int32 max_depth = 2;
+  int32 concurrency = 3;
+}
+
+message Endpoint {
+  string id = 1;
+  string method = 2;
+  string path = 3;
+  string base_url = 4;
+  repeated string tags = 5;
+  string source = 6;
+}
+
+message ScanResponse {
+  string id = 1;
+  string name = 2;
+  string base_url = 3;
+  repeated Endpoint endpoints = 4;
+}
+
+message ProfileResponse {
+  string id = 1;
+  string name = 2;
+  string base_url = 3;
+  repeated Endpoint endpoints = 4;
+  string created_at = 5;
+  string updated_at = 6;
+}
+
+// --- Run ---
+
+message RunRequest {
+  repeated string categories = 1;
+  int32 concurrency = 2;
+  int32 timeout_seconds = 3;
+}
+
+message SingleTestResult {
+  string test_case_id = 1;
+  string test_name = 2;
+  string status = 3;   // passed, failed, error, skipped
+  string category = 4;
+  string severity = 5;
+  int64 duration_ms = 6;
+  string error = 7;
+}
+
+message RunResponse {
+  string profile_id = 1;
+  int32 total_tests = 2;
+  int32 passed = 3;
+  int32 failed = 4;
+  int32 errors = 5;
+  int32 skipped = 6;
+  int64 duration_ms = 7;
+  string started_at = 8;
+  string finished_at = 9;
+  map<string, int32> by_severity = 10;
+  map<string, int32> by_category = 11;
+  repeated SingleTestResult results = 12;
+}
+
+message GetRunRequest {
+  string id = 1;
+}
