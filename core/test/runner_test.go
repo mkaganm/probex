@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
+	"sync/atomic"
 	"testing"
 	"time"
 
@@ -155,9 +156,9 @@ func TestExecuteHeaderAssert(t *testing.T) {
 }
 
 func TestExecuteConcurrent(t *testing.T) {
-	callCount := 0
+	var callCount atomic.Int32
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		callCount++
+		callCount.Add(1)
 		w.WriteHeader(200)
 		w.Write([]byte(`{"ok":true}`))
 	}))
