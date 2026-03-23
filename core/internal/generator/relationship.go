@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/probex/probex/internal/models"
+	"github.com/mkaganm/probex/internal/models"
 )
 
 // Relationship generates tests for inter-endpoint dependencies.

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/probex/probex/internal/models"
+	"github.com/mkaganm/probex/internal/models"
 )
 
 // WebSocket generates tests specific to WebSocket endpoints.

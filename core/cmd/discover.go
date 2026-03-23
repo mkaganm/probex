@@ -4,9 +4,9 @@ import (
 	"fmt"
 
 	"github.com/fatih/color"
-	"github.com/probex/probex/internal/scanner/iac"
-	"github.com/probex/probex/internal/storage"
-	"github.com/probex/probex/internal/ui"
+	"github.com/mkaganm/probex/internal/scanner/iac"
+	"github.com/mkaganm/probex/internal/storage"
+	"github.com/mkaganm/probex/internal/ui"
 	"github.com/spf13/cobra"
 )
 

@@ -9,8 +9,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/probex/probex/internal/models"
-	"github.com/probex/probex/internal/runner"
+	"github.com/mkaganm/probex/internal/models"
+	"github.com/mkaganm/probex/internal/runner"
 )
 
 func TestNewExecutor(t *testing.T) {

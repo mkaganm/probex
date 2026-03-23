@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/probex/probex/internal/models"
+	"github.com/mkaganm/probex/internal/models"
 )
 
 // Security generates OWASP API Top 10 security tests.

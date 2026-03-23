@@ -4,8 +4,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/probex/probex/internal/models"
-	"github.com/probex/probex/internal/watch"
+	"github.com/mkaganm/probex/internal/models"
+	"github.com/mkaganm/probex/internal/watch"
 )
 
 func TestAnomalyDetectorResponseTime(t *testing.T) {

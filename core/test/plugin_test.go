@@ -4,8 +4,8 @@ import (
 	"context"
 	"testing"
 
-	"github.com/probex/probex/internal/models"
-	"github.com/probex/probex/internal/plugin"
+	"github.com/mkaganm/probex/internal/models"
+	"github.com/mkaganm/probex/internal/plugin"
 )
 
 // mockGenerator is a test generator plugin.

@@ -8,7 +8,7 @@ import (
 
 	"github.com/tidwall/gjson"
 
-	"github.com/probex/probex/internal/models"
+	"github.com/mkaganm/probex/internal/models"
 )
 
 // AssertionEngine evaluates assertions against actual HTTP responses.

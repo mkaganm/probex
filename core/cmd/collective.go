@@ -8,9 +8,9 @@ import (
 	"time"
 
 	"github.com/fatih/color"
-	"github.com/probex/probex/internal/collective"
-	"github.com/probex/probex/internal/storage"
-	"github.com/probex/probex/internal/ui"
+	"github.com/mkaganm/probex/internal/collective"
+	"github.com/mkaganm/probex/internal/storage"
+	"github.com/mkaganm/probex/internal/ui"
 	"github.com/spf13/cobra"
 )
 

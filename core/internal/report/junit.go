@@ -6,7 +6,7 @@ import (
 	"io"
 	"strings"
 
-	"github.com/probex/probex/internal/models"
+	"github.com/mkaganm/probex/internal/models"
 )
 
 // JUnit XML structures for encoding.

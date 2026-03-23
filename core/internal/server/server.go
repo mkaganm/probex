@@ -4,8 +4,8 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/probex/probex/internal/dashboard"
-	"github.com/probex/probex/internal/storage"
+	"github.com/mkaganm/probex/internal/dashboard"
+	"github.com/mkaganm/probex/internal/storage"
 )
 
 // Server provides a REST API for SDK clients (Java, JS/TS).

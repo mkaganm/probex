@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/probex/probex/internal/models"
+	"github.com/mkaganm/probex/internal/models"
 )
 
 // GraphQL generates tests specific to GraphQL endpoints.

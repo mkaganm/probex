@@ -17,7 +17,7 @@ Register plugins programmatically when embedding PROBEX as a library:
 ```go
 package main
 
-import "github.com/probex/probex/internal/plugin"
+import "github.com/mkaganm/probex/internal/plugin"
 
 type MyGenerator struct{}
 

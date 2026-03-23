@@ -73,7 +73,7 @@ release:
 
     ```bash
     # macOS / Linux
-    curl -sSL https://github.com/probex/probex/releases/download/{{.Tag}}/probex_{{.Version}}_$(uname -s | tr '[:upper:]' '[:lower:]')_$(uname -m | sed 's/x86_64/amd64/').tar.gz | tar xz
+    curl -sSL https://github.com/mkaganm/probex/releases/download/{{.Tag}}/probex_{{.Version}}_$(uname -s | tr '[:upper:]' '[:lower:]')_$(uname -m | sed 's/x86_64/amd64/').tar.gz | tar xz
     sudo mv probex /usr/local/bin/
 
     # Docker

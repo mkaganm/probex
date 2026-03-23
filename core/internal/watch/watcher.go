@@ -9,8 +9,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/probex/probex/internal/models"
-	"github.com/probex/probex/internal/schema"
+	"github.com/mkaganm/probex/internal/models"
+	"github.com/mkaganm/probex/internal/schema"
 )
 
 // WatchEvent is the result of a single watch cycle.

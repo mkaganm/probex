@@ -7,7 +7,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/probex/probex/internal/models"
+	"github.com/mkaganm/probex/internal/models"
 )
 
 // EdgeCase generates tests for boundary conditions and unusual inputs.

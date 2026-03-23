@@ -6,7 +6,7 @@ import (
 	"html/template"
 	"net/http"
 
-	"github.com/probex/probex/internal/storage"
+	"github.com/mkaganm/probex/internal/storage"
 )
 
 // Dashboard serves a web UI for viewing PROBEX results.

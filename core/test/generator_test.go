@@ -3,8 +3,8 @@ package test
 import (
 	"testing"
 
-	"github.com/probex/probex/internal/generator"
-	"github.com/probex/probex/internal/models"
+	"github.com/mkaganm/probex/internal/generator"
+	"github.com/mkaganm/probex/internal/models"
 )
 
 func TestNewEngine(t *testing.T) {

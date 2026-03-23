@@ -40,7 +40,7 @@ publishing {
             pom {
                 name.set("PROBEX Kotlin SDK")
                 description.set("Kotlin coroutine-based SDK for PROBEX API testing engine")
-                url.set("https://github.com/probex/probex")
+                url.set("https://github.com/mkaganm/probex")
                 licenses {
                     license {
                         name.set("MIT")

@@ -10,7 +10,7 @@ import (
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"
 
-	"github.com/probex/probex/internal/server"
+	"github.com/mkaganm/probex/internal/server"
 )
 
 var serveCmd = &cobra.Command{

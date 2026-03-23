@@ -8,7 +8,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/probex/probex/internal/models"
+	"github.com/mkaganm/probex/internal/models"
 )
 
 // Executor runs test cases concurrently and collects results.

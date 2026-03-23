@@ -8,11 +8,11 @@ import (
 	"time"
 
 	"github.com/fatih/color"
-	"github.com/probex/probex/internal/ai"
-	"github.com/probex/probex/internal/models"
-	"github.com/probex/probex/internal/runner"
-	"github.com/probex/probex/internal/storage"
-	"github.com/probex/probex/internal/ui"
+	"github.com/mkaganm/probex/internal/ai"
+	"github.com/mkaganm/probex/internal/models"
+	"github.com/mkaganm/probex/internal/runner"
+	"github.com/mkaganm/probex/internal/storage"
+	"github.com/mkaganm/probex/internal/ui"
 	"github.com/spf13/cobra"
 )
 

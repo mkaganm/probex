@@ -3,8 +3,8 @@ package test
 import (
 	"testing"
 
-	"github.com/probex/probex/internal/models"
-	"github.com/probex/probex/internal/schema"
+	"github.com/mkaganm/probex/internal/models"
+	"github.com/mkaganm/probex/internal/schema"
 )
 
 func TestInferFromJSON(t *testing.T) {

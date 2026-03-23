@@ -7,8 +7,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/probex/probex/internal/collective"
-	"github.com/probex/probex/internal/models"
+	"github.com/mkaganm/probex/internal/collective"
+	"github.com/mkaganm/probex/internal/models"
 )
 
 func TestAnonymizerExtractPatterns(t *testing.T) {

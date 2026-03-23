@@ -4,8 +4,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/probex/probex/internal/graph"
-	"github.com/probex/probex/internal/models"
+	"github.com/mkaganm/probex/internal/graph"
+	"github.com/mkaganm/probex/internal/models"
 )
 
 func makeTestProfile() *models.APIProfile {

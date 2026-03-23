@@ -37,7 +37,7 @@ probex run
 ### From Source
 
 ```bash
-git clone https://github.com/probex/probex.git
+git clone https://github.com/mkaganm/probex.git
 cd probex
 make build
 # Binary at ./bin/probex

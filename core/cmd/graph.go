@@ -5,8 +5,8 @@ import (
 	"os"
 
 	"github.com/fatih/color"
-	"github.com/probex/probex/internal/graph"
-	"github.com/probex/probex/internal/storage"
+	"github.com/mkaganm/probex/internal/graph"
+	"github.com/mkaganm/probex/internal/storage"
 	"github.com/spf13/cobra"
 )
 

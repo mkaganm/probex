@@ -8,7 +8,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/probex/probex/internal/models"
+	"github.com/mkaganm/probex/internal/models"
 )
 
 // commonAuthEndpoints are well-known authentication endpoint paths to probe.

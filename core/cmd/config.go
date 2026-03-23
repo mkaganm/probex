@@ -8,7 +8,7 @@ import (
 	"github.com/spf13/cobra"
 	"gopkg.in/yaml.v3"
 
-	"github.com/probex/probex/internal/models"
+	"github.com/mkaganm/probex/internal/models"
 )
 
 var configCmd = &cobra.Command{
@@ -68,7 +68,7 @@ func runConfigInit(cmd *cobra.Command, args []string) error {
 
 	// Add header comment.
 	header := "# PROBEX Configuration\n" +
-		"# See https://github.com/probex/probex for documentation\n" +
+		"# See https://github.com/mkaganm/probex for documentation\n" +
 		"#\n" +
 		"# Quick start:\n" +
 		"#   1. Set target.base_url to your API\n" +

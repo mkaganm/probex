@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package probex.ai;
 
-option go_package = "github.com/probex/probex/proto/ai";
+option go_package = "github.com/mkaganm/probex/proto/ai";
 
 // AIService defines the communication interface between
 // the Go CLI and the Python AI brain.

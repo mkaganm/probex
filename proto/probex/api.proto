@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package probex.api;
 
-option go_package = "github.com/probex/probex/proto/api";
+option go_package = "github.com/mkaganm/probex/proto/api";
 
 // ProbexAPI defines the external API for SDKs and integrations.
 // This is the gRPC equivalent of the REST API served by `probex serve`.

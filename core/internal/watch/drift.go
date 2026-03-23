@@ -3,7 +3,7 @@ package watch
 import (
 	"fmt"
 
-	"github.com/probex/probex/internal/models"
+	"github.com/mkaganm/probex/internal/models"
 )
 
 // DriftDetector detects schema changes in API responses.

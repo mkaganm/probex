@@ -8,10 +8,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/probex/probex/internal/generator"
-	"github.com/probex/probex/internal/models"
-	"github.com/probex/probex/internal/runner"
-	"github.com/probex/probex/internal/scanner"
+	"github.com/mkaganm/probex/internal/generator"
+	"github.com/mkaganm/probex/internal/models"
+	"github.com/mkaganm/probex/internal/runner"
+	"github.com/mkaganm/probex/internal/scanner"
 )
 
 func (s *Server) registerHandlers(mux *http.ServeMux) {

@@ -16,7 +16,7 @@ Optional:
 ### Build from Source
 
 ```bash
-git clone https://github.com/probex/probex.git
+git clone https://github.com/mkaganm/probex.git
 cd probex
 make build
 ```

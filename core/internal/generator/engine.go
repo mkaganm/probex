@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/probex/probex/internal/models"
+	"github.com/mkaganm/probex/internal/models"
 )
 
 // Engine orchestrates test generation from an API profile.

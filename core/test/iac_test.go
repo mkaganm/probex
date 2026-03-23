@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/probex/probex/internal/scanner/iac"
+	"github.com/mkaganm/probex/internal/scanner/iac"
 )
 
 func TestIaCTerraformDiscovery(t *testing.T) {

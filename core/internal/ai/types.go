@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/probex/probex/internal/models"
+	"github.com/mkaganm/probex/internal/models"
 )
 
 // HealthResponse represents the Python brain health check response.

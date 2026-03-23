@@ -18,7 +18,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/probex/probex/internal/models"
+	"github.com/mkaganm/probex/internal/models"
 )
 
 // Pattern represents an anonymized, shareable test pattern.

@@ -5,7 +5,7 @@ import (
 	"math"
 	"time"
 
-	"github.com/probex/probex/internal/models"
+	"github.com/mkaganm/probex/internal/models"
 )
 
 // AnomalyDetector detects anomalous API behavior using statistical methods.

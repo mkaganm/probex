@@ -8,7 +8,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/probex/probex/internal/models"
+	"github.com/mkaganm/probex/internal/models"
 )
 
 // ExternalPlugin communicates with an external plugin process via HTTP JSON-RPC.

@@ -6,7 +6,7 @@ import (
 	"io"
 	"time"
 
-	"github.com/probex/probex/internal/models"
+	"github.com/mkaganm/probex/internal/models"
 )
 
 // HTMLReporter generates human-readable HTML reports.

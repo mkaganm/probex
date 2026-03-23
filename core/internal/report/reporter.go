@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/probex/probex/internal/models"
+	"github.com/mkaganm/probex/internal/models"
 )
 
 // Reporter is the common interface for all report generators.

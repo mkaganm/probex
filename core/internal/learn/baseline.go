@@ -4,7 +4,7 @@ import (
 	"sort"
 	"time"
 
-	"github.com/probex/probex/internal/models"
+	"github.com/mkaganm/probex/internal/models"
 )
 
 // BuildBaseline calculates performance baselines from grouped HAR entries.

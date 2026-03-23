@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/probex/probex/internal/models"
+	"github.com/mkaganm/probex/internal/models"
 )
 
 // Type identifies the kind of plugin.

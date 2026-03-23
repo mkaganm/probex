@@ -11,9 +11,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/probex/probex/internal/learn"
-	"github.com/probex/probex/internal/models"
-	"github.com/probex/probex/internal/schema"
+	"github.com/mkaganm/probex/internal/learn"
+	"github.com/mkaganm/probex/internal/models"
+	"github.com/mkaganm/probex/internal/schema"
 )
 
 // CapturedRequest holds a captured HTTP request/response pair.

@@ -8,9 +8,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/probex/probex/internal/generator"
-	"github.com/probex/probex/internal/models"
-	"github.com/probex/probex/internal/scanner"
+	"github.com/mkaganm/probex/internal/generator"
+	"github.com/mkaganm/probex/internal/models"
+	"github.com/mkaganm/probex/internal/scanner"
 )
 
 func TestGraphQLDetection(t *testing.T) {

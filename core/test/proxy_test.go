@@ -8,7 +8,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/probex/probex/internal/proxy"
+	"github.com/mkaganm/probex/internal/proxy"
 )
 
 func TestProxyCapture(t *testing.T) {

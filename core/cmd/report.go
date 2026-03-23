@@ -6,9 +6,9 @@ import (
 	"os"
 
 	"github.com/fatih/color"
-	"github.com/probex/probex/internal/models"
-	"github.com/probex/probex/internal/report"
-	"github.com/probex/probex/internal/storage"
+	"github.com/mkaganm/probex/internal/models"
+	"github.com/mkaganm/probex/internal/report"
+	"github.com/mkaganm/probex/internal/storage"
 	"github.com/spf13/cobra"
 )
 

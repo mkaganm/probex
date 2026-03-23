@@ -7,8 +7,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/probex/probex/internal/models"
-	"github.com/probex/probex/internal/scanner"
+	"github.com/mkaganm/probex/internal/models"
+	"github.com/mkaganm/probex/internal/scanner"
 )
 
 func TestNewScanner(t *testing.T) {

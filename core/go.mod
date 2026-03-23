@@ -1,4 +1,4 @@
-module github.com/probex/probex
+module github.com/mkaganm/probex
 
 go 1.23
 

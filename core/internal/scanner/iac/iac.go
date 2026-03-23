@@ -15,7 +15,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/probex/probex/internal/models"
+	"github.com/mkaganm/probex/internal/models"
 )
 
 // Scanner discovers API endpoints from IaC configuration files.
