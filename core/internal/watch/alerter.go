@@ -147,8 +147,9 @@ func (t *WebhookTarget) Send(ctx context.Context, alert Alert) error {
 	if err != nil {
 		return err
 	}
-	io.ReadAll(resp.Body)
-	resp.Body.Close()
+	defer resp.Body.Close()
+	// Drain body to allow connection reuse.
+	_, _ = io.Copy(io.Discard, resp.Body)
 
 	if resp.StatusCode >= 400 {
 		return fmt.Errorf("webhook returned %d", resp.StatusCode)
@@ -214,8 +215,9 @@ func (t *SlackTarget) Send(ctx context.Context, alert Alert) error {
 	if err != nil {
 		return err
 	}
-	io.ReadAll(resp.Body)
-	resp.Body.Close()
+	defer resp.Body.Close()
+	// Drain body to allow connection reuse.
+	_, _ = io.Copy(io.Discard, resp.Body)
 
 	if resp.StatusCode >= 400 {
 		return fmt.Errorf("slack webhook returned %d", resp.StatusCode)

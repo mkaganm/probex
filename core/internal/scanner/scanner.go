@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"strings"
 	"sync"
@@ -76,8 +77,7 @@ func (s *Scanner) Scan(ctx context.Context) (*Result, error) {
 
 	oaEndpoints, err := oaParser.Discover(ctx)
 	if err != nil {
-		// Non-fatal: log and continue
-		_ = err
+		log.Printf("[scanner] OpenAPI discovery: %v", err)
 	}
 	for _, ep := range oaEndpoints {
 		key := ep.Method + ":" + ep.Path
@@ -96,10 +96,12 @@ func (s *Scanner) Scan(ctx context.Context) (*Result, error) {
 		}
 
 		crawledURLs, err := crawler.Crawl(ctx)
-		if err != nil && ctx.Err() != nil {
-			return nil, ctx.Err()
+		if err != nil {
+			if ctx.Err() != nil {
+				return nil, ctx.Err()
+			}
+			log.Printf("[scanner] crawl: %v", err)
 		}
-		_ = err
 
 		// Probe each crawled URL with GET
 		crawlEndpoints := s.probeURLs(ctx, crawledURLs, models.SourceCrawl)

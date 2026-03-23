@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"strings"
 	"sync"
+	"sync/atomic"
 	"time"
 
 	"github.com/mkaganm/probex/internal/models"
@@ -46,7 +47,7 @@ func (e *Executor) Execute(ctx context.Context, tests []models.TestCase) (*model
 	var wg sync.WaitGroup
 
 	stopCh := make(chan struct{})
-	stopped := false
+	var stopped atomic.Bool
 
 	for _, tc := range tests {
 		select {
@@ -57,7 +58,7 @@ func (e *Executor) Execute(ctx context.Context, tests []models.TestCase) (*model
 		default:
 		}
 
-		if stopped {
+		if stopped.Load() {
 			break
 		}
 
@@ -73,8 +74,7 @@ func (e *Executor) Execute(ctx context.Context, tests []models.TestCase) (*model
 			mu.Lock()
 			results = append(results, result)
 			if e.opts.StopOnFail && (result.Status == models.StatusFailed || result.Status == models.StatusError) {
-				if !stopped {
-					stopped = true
+				if stopped.CompareAndSwap(false, true) {
 					close(stopCh)
 				}
 			}
