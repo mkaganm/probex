@@ -31,7 +31,11 @@ Examples:
 		fmt.Println(bold.Sprint("Starting PROBEX API server..."))
 		fmt.Printf("  Listening on %s\n\n", color.CyanString("http://"+addr))
 
-		srv := server.New(addr)
+		srv, err := server.New(addr)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+			os.Exit(1)
+		}
 
 		// Graceful shutdown on SIGINT/SIGTERM.
 		ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)

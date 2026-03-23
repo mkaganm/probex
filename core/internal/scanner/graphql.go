@@ -203,9 +203,10 @@ func (gs *GraphQLScanner) DetectGraphQL(ctx context.Context) bool {
 			continue
 		}
 		respBody, _ := io.ReadAll(io.LimitReader(resp.Body, 4096))
+		statusCode := resp.StatusCode
 		resp.Body.Close()
 
-		if resp.StatusCode == 200 && gjson.GetBytes(respBody, "data").Exists() {
+		if statusCode == 200 && gjson.GetBytes(respBody, "data").Exists() {
 			gs.endpoint = path
 			return true
 		}

@@ -98,10 +98,7 @@ func (ws *WebSocketScanner) probeWebSocket(ctx context.Context, path string) (mo
 	if resp.StatusCode == 101 {
 		resp.Body.Close()
 	} else {
-		defer func() {
-			io.ReadAll(io.LimitReader(resp.Body, 1024))
-			resp.Body.Close()
-		}()
+		defer resp.Body.Close()
 	}
 
 	// WebSocket upgrade succeeds with 101 Switching Protocols.
