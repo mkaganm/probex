@@ -1,0 +1,160 @@
+syntax = "proto3";
+
+package probex.ai;
+
+option go_package = "github.com/probex/probex/proto/ai";
+
+// AIService defines the communication interface between
+// the Go CLI and the Python AI brain.
+service AIService {
+  // Generate AI-powered test scenarios for given endpoints.
+  rpc GenerateScenarios(ScenarioRequest) returns (ScenarioResponse);
+
+  // Analyze endpoints for security vulnerabilities.
+  rpc AnalyzeSecurity(SecurityAnalysisRequest) returns (SecurityAnalysisResponse);
+
+  // Convert a natural language description into executable test cases.
+  rpc NLToTest(NLTestRequest) returns (NLTestResponse);
+
+  // Classify an observed anomaly using AI.
+  rpc ClassifyAnomaly(AnomalyClassifyRequest) returns (AnomalyClassifyResponse);
+
+  // Health check.
+  rpc Health(HealthRequest) returns (HealthResponse);
+}
+
+message HealthRequest {}
+
+message HealthResponse {
+  string status = 1;
+  string version = 2;
+  string ai_mode = 3;
+  string model = 4;
+}
+
+// --- Shared types ---
+
+message EndpointInfo {
+  string method = 1;
+  string path = 2;
+  string base_url = 3;
+  repeated ParameterInfo query_params = 4;
+  repeated ParameterInfo path_params = 5;
+  SchemaInfo request_body = 6;
+  AuthDetail auth = 7;
+  repeated string tags = 8;
+}
+
+message ParameterInfo {
+  string name = 1;
+  string type = 2;
+  bool required = 3;
+  string example = 4;
+}
+
+message SchemaInfo {
+  string type = 1;
+  map<string, SchemaInfo> properties = 2;
+  SchemaInfo items = 3;
+  repeated string required = 4;
+}
+
+message AuthDetail {
+  string type = 1;
+  string location = 2;
+  string key = 3;
+}
+
+message TestRequestInfo {
+  string method = 1;
+  string url = 2;
+  map<string, string> headers = 3;
+  string body = 4;
+}
+
+message AssertionInfo {
+  string type = 1;
+  string target = 2;
+  string operator = 3;
+  string expected = 4;
+}
+
+message GeneratedTestCase {
+  string name = 1;
+  string description = 2;
+  string category = 3;
+  string severity = 4;
+  TestRequestInfo request = 5;
+  repeated AssertionInfo assertions = 6;
+  repeated string tags = 7;
+}
+
+// --- Scenario Generation ---
+
+message ScenarioRequest {
+  repeated EndpointInfo endpoints = 1;
+  string profile_context = 2;
+  int32 max_scenarios = 3;
+}
+
+message ScenarioResponse {
+  repeated GeneratedTestCase scenarios = 1;
+  string model_used = 2;
+  int32 tokens_used = 3;
+}
+
+// --- Security Analysis ---
+
+message SecurityAnalysisRequest {
+  repeated EndpointInfo endpoints = 1;
+  string depth = 2; // quick, standard, deep
+}
+
+message SecurityAnalysisResponse {
+  repeated SecurityFinding findings = 1;
+  string model_used = 2;
+  int32 tokens_used = 3;
+}
+
+message SecurityFinding {
+  string title = 1;
+  string description = 2;
+  string severity = 3;
+  string category = 4;
+  string endpoint = 5;
+  string evidence = 6;
+  string remediation = 7;
+}
+
+// --- NL to Test ---
+
+message NLTestRequest {
+  string description = 1;
+  repeated EndpointInfo endpoints = 2;
+}
+
+message NLTestResponse {
+  repeated GeneratedTestCase test_cases = 1;
+  string interpretation = 2;
+  string model_used = 3;
+  int32 tokens_used = 4;
+}
+
+// --- Anomaly Classification ---
+
+message AnomalyClassifyRequest {
+  string endpoint_id = 1;
+  int32 observed_status = 2;
+  int32 expected_status = 3;
+  string response_body = 4;
+  int32 response_time_ms = 5;
+  int32 baseline_time_ms = 6;
+}
+
+message AnomalyClassifyResponse {
+  string classification = 1;
+  double confidence = 2;
+  string explanation = 3;
+  string severity = 4;
+  string model_used = 5;
+}
