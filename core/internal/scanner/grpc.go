@@ -68,12 +68,13 @@ func (gs *GRPCScanner) DetectGRPC(ctx context.Context) bool {
 		if err != nil {
 			continue
 		}
-		io.ReadAll(io.LimitReader(resp.Body, 1024))
-		resp.Body.Close()
 
 		// gRPC services often return specific headers or 415 for wrong content type.
 		ct := resp.Header.Get("Content-Type")
-		if strings.Contains(ct, "grpc") || resp.StatusCode == 415 {
+		statusCode := resp.StatusCode
+		_, _ = io.Copy(io.Discard, resp.Body)
+		resp.Body.Close()
+		if strings.Contains(ct, "grpc") || statusCode == 415 {
 			return true
 		}
 	}
@@ -100,9 +101,10 @@ func (gs *GRPCScanner) DetectGRPC(ctx context.Context) bool {
 			continue
 		}
 		body, _ := io.ReadAll(io.LimitReader(resp.Body, 4096))
+		statusCode := resp.StatusCode
 		resp.Body.Close()
 
-		if resp.StatusCode == 200 && gjson.ValidBytes(body) {
+		if statusCode == 200 && gjson.ValidBytes(body) {
 			status := gjson.GetBytes(body, "status")
 			if status.Exists() {
 				return true
@@ -295,12 +297,13 @@ func (gs *GRPCScanner) probeGRPCMethod(ctx context.Context, path string) bool {
 	if err != nil {
 		return false
 	}
-	io.ReadAll(io.LimitReader(resp.Body, 1024))
+	statusCode := resp.StatusCode
+	_, _ = io.Copy(io.Discard, resp.Body)
 	resp.Body.Close()
 
 	// A gRPC endpoint typically returns 200, 401, 403, or specific gRPC errors.
 	// 404 means it doesn't exist.
-	return resp.StatusCode != 404 && resp.StatusCode != 405
+	return statusCode != 404 && statusCode != 405
 }
 
 // ExportServiceDescriptor returns a JSON description of discovered services.

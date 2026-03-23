@@ -159,7 +159,16 @@ func (w *Watcher) probeEndpoint(ctx context.Context, ep models.Endpoint) ([]Anom
 	}
 	defer resp.Body.Close()
 
-	body, _ := io.ReadAll(io.LimitReader(resp.Body, 2*1024*1024))
+	body, err := io.ReadAll(io.LimitReader(resp.Body, 2*1024*1024))
+	if err != nil {
+		anomalies = append(anomalies, Anomaly{
+			EndpointID:  ep.ID,
+			Metric:      "response_read",
+			Severity:    models.SeverityMedium,
+			Description: fmt.Sprintf("Failed to read response body: %v", err),
+		})
+		return anomalies, nil
+	}
 
 	// Check against baseline
 	if w.profile.Baseline != nil {

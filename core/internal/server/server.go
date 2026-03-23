@@ -2,6 +2,7 @@ package server
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 
 	"github.com/mkaganm/probex/internal/dashboard"
@@ -15,9 +16,12 @@ type Server struct {
 	store  *storage.Store
 }
 
-// New creates a new API server.
-func New(addr string) *Server {
-	store, _ := storage.New("")
+// New creates a new API server. Returns an error if storage initialization fails.
+func New(addr string) (*Server, error) {
+	store, err := storage.New("")
+	if err != nil {
+		return nil, fmt.Errorf("initializing storage: %w", err)
+	}
 	s := &Server{addr: addr, store: store}
 	mux := http.NewServeMux()
 	s.registerHandlers(mux)
@@ -27,7 +31,7 @@ func New(addr string) *Server {
 	dash.RegisterHandlers(mux)
 
 	s.server = &http.Server{Addr: addr, Handler: mux}
-	return s
+	return s, nil
 }
 
 // Start begins listening for connections.

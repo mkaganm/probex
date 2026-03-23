@@ -219,8 +219,13 @@ func (s *Scanner) probeURLs(ctx context.Context, urls []string, source models.Di
 		go func(targetURL string) {
 			defer wg.Done()
 
-			sem <- struct{}{}
-			defer func() { <-sem }()
+			// Use select so goroutine doesn't block on semaphore after context cancel.
+			select {
+			case sem <- struct{}{}:
+				defer func() { <-sem }()
+			case <-ctx.Done():
+				return
+			}
 
 			ep, ok := s.probeURL(ctx, targetURL, source)
 			if ok {
