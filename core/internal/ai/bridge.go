@@ -16,11 +16,12 @@ const defaultPort = 9711
 
 // Bridge manages the Python AI brain subprocess.
 type Bridge struct {
-	cmd   *exec.Cmd
-	addr  string
-	port  int
-	ready bool
-	mu    sync.Mutex
+	cmd    *exec.Cmd
+	addr   string
+	port   int
+	ready  bool
+	mu     sync.Mutex
+	client *http.Client
 }
 
 // NewBridge creates a new Bridge that manages the Python brain process.
@@ -30,8 +31,9 @@ func NewBridge(port int) *Bridge {
 		port = defaultPort
 	}
 	return &Bridge{
-		port: port,
-		addr: fmt.Sprintf("http://127.0.0.1:%d", port),
+		port:   port,
+		addr:   fmt.Sprintf("http://127.0.0.1:%d", port),
+		client: &http.Client{Timeout: 2 * time.Second},
 	}
 }
 
@@ -63,10 +65,11 @@ func (b *Bridge) Start(ctx context.Context) error {
 	}
 
 	// Log stderr in a background goroutine.
+	// The goroutine exits when the subprocess closes stderr (i.e., on process exit).
 	go func() {
-		scanner := bufio.NewScanner(stderr)
-		for scanner.Scan() {
-			log.Printf("[ai-brain] %s", scanner.Text())
+		sc := bufio.NewScanner(stderr)
+		for sc.Scan() {
+			log.Printf("[ai-brain] %s", sc.Text())
 		}
 	}()
 
@@ -145,7 +148,6 @@ func (b *Bridge) waitReady(ctx context.Context) error {
 	ticker := time.NewTicker(250 * time.Millisecond)
 	defer ticker.Stop()
 
-	client := &http.Client{Timeout: 2 * time.Second}
 	url := b.addr + "/health"
 
 	for {
@@ -157,7 +159,7 @@ func (b *Bridge) waitReady(ctx context.Context) error {
 			if err != nil {
 				continue
 			}
-			resp, err := client.Do(req)
+			resp, err := b.client.Do(req)
 			if err != nil {
 				continue
 			}

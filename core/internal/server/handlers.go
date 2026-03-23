@@ -3,6 +3,7 @@ package server
 import (
 	"context"
 	"encoding/json"
+	"io"
 	"net/http"
 	"os"
 	"strings"
@@ -13,6 +14,9 @@ import (
 	"github.com/mkaganm/probex/internal/runner"
 	"github.com/mkaganm/probex/internal/scanner"
 )
+
+// maxRequestBodySize limits request body reads to 1MB.
+const maxRequestBodySize = 1 * 1024 * 1024
 
 func (s *Server) registerHandlers(mux *http.ServeMux) {
 	mux.HandleFunc("GET /api/v1/health", s.handleHealth)
@@ -64,7 +68,7 @@ type ScanRequest struct {
 
 func (s *Server) handleScan(w http.ResponseWriter, r *http.Request) {
 	var req ScanRequest
-	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+	if err := json.NewDecoder(io.LimitReader(r.Body, maxRequestBodySize)).Decode(&req); err != nil {
 		writeError(w, http.StatusBadRequest, "invalid JSON body: "+err.Error())
 		return
 	}
@@ -131,7 +135,7 @@ type RunRequest struct {
 
 func (s *Server) handleRun(w http.ResponseWriter, r *http.Request) {
 	var req RunRequest
-	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+	if err := json.NewDecoder(io.LimitReader(r.Body, maxRequestBodySize)).Decode(&req); err != nil {
 		writeError(w, http.StatusBadRequest, "invalid JSON body: "+err.Error())
 		return
 	}
