@@ -8,6 +8,21 @@ probex run
 # Done. Tests generated and executed automatically.
 ```
 
+## Documentation
+
+| | |
+|---|---|
+| [Getting Started](docs/getting-started.md) | Installation, first scan, quick start guide |
+| [Architecture](docs/architecture.md) | System design, package structure, scan/generator pipelines |
+| [Configuration](docs/configuration.md) | Full `probex.yaml` reference, AI modes, environment variables |
+| [Security Testing](docs/security.md) | OWASP API Top 10 coverage, protocol-specific security |
+| [SDK — JavaScript/TypeScript](docs/sdk-js.md) | npm client, Jest/Vitest plugins, GitHub Actions |
+| [SDK — Java](docs/sdk-java.md) | Maven/Gradle SDK, JUnit 5 extension, Maven/Gradle plugins |
+| [SDK — Kotlin](docs/sdk-kotlin.md) | Coroutine client, DSL, JUnit helper |
+| [Plugins](docs/plugins.md) | Go interface + HTTP JSON-RPC external plugin system |
+| [IaC Discovery](docs/iac-discovery.md) | Terraform, Kubernetes, Docker Compose endpoint discovery |
+| [Collective Intelligence](docs/collective.md) | Anonymous community pattern sharing |
+
 ## What It Does
 
 1. **Scan** — Discovers endpoints via OpenAPI specs, crawling, wordlists, GraphQL introspection, WebSocket probing, and gRPC reflection
@@ -185,19 +200,6 @@ report:
 probex scan $API_URL
 probex guard --fail-on critical,high --report-file results.xml
 ```
-
-## Documentation
-
-- [Getting Started](docs/getting-started.md)
-- [Architecture](docs/architecture.md)
-- [Configuration](docs/configuration.md)
-- [Security Testing](docs/security.md)
-- [SDK — JavaScript/TypeScript](docs/sdk-js.md)
-- [SDK — Java](docs/sdk-java.md)
-- [SDK — Kotlin](docs/sdk-kotlin.md)
-- [Plugins](docs/plugins.md)
-- [IaC Discovery](docs/iac-discovery.md)
-- [Collective Intelligence](docs/collective.md)
 
 ## License
 
