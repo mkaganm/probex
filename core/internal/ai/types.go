@@ -37,13 +37,13 @@ type ParameterInfo struct {
 
 // SchemaInfo represents a JSON schema for the AI service.
 type SchemaInfo struct {
-	Type       string                `json:"type"`
+	Type       string                 `json:"type"`
 	Properties map[string]*SchemaInfo `json:"properties,omitempty"`
-	Items      *SchemaInfo           `json:"items,omitempty"`
-	Required   []string              `json:"required,omitempty"`
-	Enum       []any                 `json:"enum,omitempty"`
-	Pattern    string                `json:"pattern,omitempty"`
-	Format     string                `json:"format,omitempty"`
+	Items      *SchemaInfo            `json:"items,omitempty"`
+	Required   []string               `json:"required,omitempty"`
+	Enum       []any                  `json:"enum,omitempty"`
+	Pattern    string                 `json:"pattern,omitempty"`
+	Format     string                 `json:"format,omitempty"`
 }
 
 // AuthDetail represents authentication info for the AI service.

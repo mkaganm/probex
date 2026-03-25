@@ -32,7 +32,7 @@ func New(rootDir string) *Scanner {
 type Discovery struct {
 	Endpoints []models.Endpoint `json:"endpoints"`
 	Source    string            `json:"source"` // e.g. "terraform", "kubernetes"
-	Files    []string          `json:"files"`
+	Files     []string          `json:"files"`
 }
 
 // Scan walks the directory tree looking for IaC files and extracts endpoints.
@@ -88,20 +88,16 @@ func (s *Scanner) Scan() (*Discovery, error) {
 	return &Discovery{
 		Endpoints: allEndpoints,
 		Source:    source,
-		Files:    allFiles,
+		Files:     allFiles,
 	}, nil
 }
 
 // --- Terraform HCL parsing (regex-based, no HCL dependency) ---
 
 var (
-	// Match aws_api_gateway_resource, aws_apigatewayv2_route, etc.
-	tfResourceRe = regexp.MustCompile(`resource\s+"(aws_api_gateway\w+|aws_apigatewayv2_\w+|aws_lambda_function_url|aws_lb_listener_rule|aws_alb_listener_rule)"\s+"(\w+)"`)
 	tfRouteKeyRe = regexp.MustCompile(`route_key\s*=\s*"([^"]+)"`)
 	tfPathPartRe = regexp.MustCompile(`path_part\s*=\s*"([^"]+)"`)
 	tfMethodRe   = regexp.MustCompile(`http_method\s*=\s*"([^"]+)"`)
-	tfStageRe    = regexp.MustCompile(`stage_name\s*=\s*"([^"]+)"`)
-	tfInvokeURLRe = regexp.MustCompile(`invoke_url\s*=\s*"([^"]+)"`)
 )
 
 func parseTerraform(path string) ([]models.Endpoint, error) {
@@ -127,10 +123,10 @@ func parseTerraform(path string) ([]models.Endpoint, error) {
 			p = parts[1]
 		}
 		endpoints = append(endpoints, models.Endpoint{
-			Method:  method,
-			Path:    p,
-			Tags:    []string{"iac", "terraform", "api-gateway"},
-			Source:  models.SourceIaC,
+			Method: method,
+			Path:   p,
+			Tags:   []string{"iac", "terraform", "api-gateway"},
+			Source: models.SourceIaC,
 		})
 	}
 
@@ -143,20 +139,20 @@ func parseTerraform(path string) ([]models.Endpoint, error) {
 			method = strings.ToUpper(methods[i][1])
 		}
 		endpoints = append(endpoints, models.Endpoint{
-			Method:  method,
-			Path:    "/" + pp[1],
-			Tags:    []string{"iac", "terraform", "api-gateway-v1"},
-			Source:  models.SourceIaC,
+			Method: method,
+			Path:   "/" + pp[1],
+			Tags:   []string{"iac", "terraform", "api-gateway-v1"},
+			Source: models.SourceIaC,
 		})
 	}
 
 	// Lambda function URLs
 	if strings.Contains(content, "aws_lambda_function_url") {
 		endpoints = append(endpoints, models.Endpoint{
-			Method:  "ANY",
-			Path:    "/",
-			Tags:    []string{"iac", "terraform", "lambda-url"},
-			Source:  models.SourceIaC,
+			Method: "ANY",
+			Path:   "/",
+			Tags:   []string{"iac", "terraform", "lambda-url"},
+			Source: models.SourceIaC,
 		})
 	}
 
@@ -180,10 +176,10 @@ func parsePulumiOrK8s(path string) ([]models.Endpoint, error) {
 		matches := ingressPathRe.FindAllStringSubmatch(content, -1)
 		for _, m := range matches {
 			endpoints = append(endpoints, models.Endpoint{
-				Method:  "ANY",
-				Path:    m[1],
-				Tags:    []string{"iac", "kubernetes", "ingress"},
-				Source:  models.SourceIaC,
+				Method: "ANY",
+				Path:   m[1],
+				Tags:   []string{"iac", "kubernetes", "ingress"},
+				Source: models.SourceIaC,
 			})
 		}
 	}
@@ -221,10 +217,10 @@ func parsePulumiOrK8s(path string) ([]models.Endpoint, error) {
 				p = parts[1]
 			}
 			endpoints = append(endpoints, models.Endpoint{
-				Method:  method,
-				Path:    p,
-				Tags:    []string{"iac", "pulumi", "api-gateway"},
-				Source:  models.SourceIaC,
+				Method: method,
+				Path:   p,
+				Tags:   []string{"iac", "pulumi", "api-gateway"},
+				Source: models.SourceIaC,
 			})
 		}
 	}

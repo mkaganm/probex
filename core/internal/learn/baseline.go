@@ -24,8 +24,8 @@ func BuildBaseline(grouped map[EndpointKey][]Entry) *models.Baseline {
 // buildEndpointBaseline calculates baseline statistics for a single endpoint.
 func buildEndpointBaseline(key EndpointKey, entries []Entry) *models.EndpointBaseline {
 	eb := &models.EndpointBaseline{
-		EndpointID:   endpointID(key),
-		SampleCount:  len(entries),
+		EndpointID:     endpointID(key),
+		SampleCount:    len(entries),
 		StatusCodeDist: make(map[int]int),
 	}
 

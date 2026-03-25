@@ -1,4 +1,4 @@
-.PHONY: all build test lint clean help sdk-js sdk-kotlin brain docker docker-core docker-up docker-down
+.PHONY: all build test test-short test-cover lint fmt vet tidy clean help sdk-js sdk-kotlin brain docker docker-core docker-up docker-down
 
 BINARY_NAME := probex
 BUILD_DIR := ./bin
@@ -15,11 +15,17 @@ build:
 
 ## test: Run all Go tests
 test:
-	cd $(CORE_DIR) && go test ./... -v
+	cd $(CORE_DIR) && go test ./... -v -race -timeout 120s
 
 ## test-short: Run tests without verbose output
 test-short:
-	cd $(CORE_DIR) && go test ./...
+	cd $(CORE_DIR) && go test ./... -race -timeout 120s
+
+## test-cover: Run tests with coverage report
+test-cover:
+	cd $(CORE_DIR) && go test ./... -race -timeout 120s -coverpkg=./... -coverprofile=coverage.out
+	@cd $(CORE_DIR) && go tool cover -func=coverage.out | tail -1
+	@echo "HTML report: cd core && go tool cover -html=coverage.out"
 
 ## lint: Run golangci-lint
 lint:

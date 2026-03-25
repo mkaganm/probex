@@ -1,10 +1,8 @@
 package generator
 
 import (
-	"encoding/json"
 	"fmt"
 	"strings"
-	"time"
 
 	"github.com/mkaganm/probex/internal/models"
 )
@@ -224,20 +222,6 @@ func endsWithIDSegment(path string) bool {
 	return strings.HasPrefix(last, "{") || strings.HasPrefix(last, ":")
 }
 
-// buildRelationshipBody creates a JSON body for relationship tests with placeholder values.
-func buildRelationshipBody(schema *models.Schema) string {
-	if schema == nil {
-		return ""
-	}
-	body := buildExampleBody(schema)
-	b, err := json.Marshal(body)
-	if err != nil {
-		return ""
-	}
-	return string(b)
-}
-
 // init is not needed; relationship generator is added to Engine separately
 // since it needs all endpoints set via SetEndpoints
 var _ Generator = (*Relationship)(nil)
-var _ = time.Second // ensure time is used

@@ -74,10 +74,10 @@ func runNLTest(cmd *cobra.Command, args []string) error {
 	defer cancel()
 
 	bridge := ai.NewBridge(0)
-	if err := bridge.Start(ctx); err != nil {
-		return fmt.Errorf("starting AI brain: %w", err)
+	if startErr := bridge.Start(ctx); startErr != nil {
+		return fmt.Errorf("starting AI brain: %w", startErr)
 	}
-	defer bridge.Stop()
+	defer func() { _ = bridge.Stop() }()
 
 	client := ai.NewClient(bridge.Address())
 

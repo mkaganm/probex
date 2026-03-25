@@ -16,7 +16,7 @@ func TestProxyCapture(t *testing.T) {
 	target := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(200)
-		w.Write([]byte(`{"id": 1, "name": "test"}`))
+		_, _ = w.Write([]byte(`{"id": 1, "name": "test"}`))
 	}))
 	defer target.Close()
 
@@ -57,9 +57,9 @@ func TestProxyToAPIProfile(t *testing.T) {
 		w.Header().Set("Content-Type", "application/json")
 		switch r.URL.Path {
 		case "/api/users":
-			w.Write([]byte(`[{"id": 1}]`))
+			_, _ = w.Write([]byte(`[{"id": 1}]`))
 		case "/api/users/1":
-			w.Write([]byte(`{"id": 1, "name": "John"}`))
+			_, _ = w.Write([]byte(`{"id": 1, "name": "John"}`))
 		default:
 			w.WriteHeader(404)
 		}
@@ -77,16 +77,16 @@ func TestProxyToAPIProfile(t *testing.T) {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
-	go p.Start(ctx)
+	go func() { _ = p.Start(ctx) }()
 	time.Sleep(100 * time.Millisecond)
 
 	// Make requests through proxy.
 	for _, path := range []string{"/api/users", "/api/users/1"} {
-		resp, err := http.Get("http://localhost:19876" + path)
-		if err != nil {
-			t.Fatalf("request %s: %v", path, err)
+		resp, reqErr := http.Get("http://localhost:19876" + path)
+		if reqErr != nil {
+			t.Fatalf("request %s: %v", path, reqErr)
 		}
-		io.ReadAll(resp.Body)
+		_, _ = io.ReadAll(resp.Body)
 		resp.Body.Close()
 	}
 

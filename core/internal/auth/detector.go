@@ -123,10 +123,6 @@ func parseWWWAuthenticate(header string) *models.AuthInfo {
 			Location: "header",
 			Key:      "Authorization",
 		}
-		// Check if it mentions realm with oauth hints.
-		if strings.Contains(lower, "realm") {
-			// Could refine further, but bearer is the primary indicator.
-		}
 		return info
 
 	case strings.HasPrefix(lower, "basic"):

@@ -28,7 +28,7 @@ type Pattern struct {
 	Severity    string   `json:"severity"`
 	HTTPMethod  string   `json:"http_method"`
 	PathPattern string   `json:"path_pattern"` // e.g. "/resource/{id}" (anonymized)
-	TestType    string   `json:"test_type"`     // e.g. "bola", "rate_limit", "schema_drift"
+	TestType    string   `json:"test_type"`    // e.g. "bola", "rate_limit", "schema_drift"
 	Description string   `json:"description"`
 	Tags        []string `json:"tags"`
 	Score       float64  `json:"score"`       // community effectiveness score

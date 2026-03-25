@@ -13,11 +13,11 @@ import (
 
 // Result holds the complete output of the learning process.
 type Result struct {
-	Profile         *models.APIProfile  `json:"profile"`
-	TrafficAnalysis *TrafficAnalysis     `json:"traffic_analysis"`
-	PatternReport   *PatternReport       `json:"pattern_report"`
-	HARFilesRead    int                  `json:"har_files_read"`
-	EntriesAnalyzed int                  `json:"entries_analyzed"`
+	Profile         *models.APIProfile `json:"profile"`
+	TrafficAnalysis *TrafficAnalysis   `json:"traffic_analysis"`
+	PatternReport   *PatternReport     `json:"pattern_report"`
+	HARFilesRead    int                `json:"har_files_read"`
+	EntriesAnalyzed int                `json:"entries_analyzed"`
 }
 
 // Learner orchestrates the learning process from HAR files.

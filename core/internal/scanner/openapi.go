@@ -52,12 +52,6 @@ var commonSpecPaths = []string{
 	"/.well-known/openapi.json",
 }
 
-// specResult holds the result of probing a single spec path.
-type specResult struct {
-	body []byte
-	err  error
-}
-
 // Discover attempts to find and parse an OpenAPI spec at the base URL.
 // It returns the parsed endpoints or nil if no spec is found.
 func (p *OpenAPIParser) Discover(ctx context.Context) ([]models.Endpoint, error) {
@@ -79,7 +73,6 @@ func (p *OpenAPIParser) findSpec(ctx context.Context) ([]byte, error) {
 
 	type probeResult struct {
 		body []byte
-		err  error
 	}
 
 	results := make(chan probeResult, len(commonSpecPaths))
@@ -157,15 +150,15 @@ func looksLikeSpec(body []byte) bool {
 
 // genericSpec is a flexible structure for parsing both OpenAPI 3.x and Swagger 2.x.
 type genericSpec struct {
-	OpenAPI  string                          `json:"openapi" yaml:"openapi"`
-	Swagger  string                          `json:"swagger" yaml:"swagger"`
-	Paths    map[string]map[string]*specOp   `json:"paths" yaml:"paths"`
-	Servers  []specServer                    `json:"servers" yaml:"servers"`
-	Host     string                          `json:"host" yaml:"host"`     // Swagger 2.x
-	BasePath string                          `json:"basePath" yaml:"basePath"` // Swagger 2.x
-	Security []map[string][]string           `json:"security" yaml:"security"`
-	SecurityDefs map[string]securityScheme   `json:"securityDefinitions" yaml:"securityDefinitions"` // Swagger 2.x
-	Components   *specComponents             `json:"components" yaml:"components"` // OpenAPI 3.x
+	OpenAPI      string                        `json:"openapi" yaml:"openapi"`
+	Swagger      string                        `json:"swagger" yaml:"swagger"`
+	Paths        map[string]map[string]*specOp `json:"paths" yaml:"paths"`
+	Servers      []specServer                  `json:"servers" yaml:"servers"`
+	Host         string                        `json:"host" yaml:"host"`         // Swagger 2.x
+	BasePath     string                        `json:"basePath" yaml:"basePath"` // Swagger 2.x
+	Security     []map[string][]string         `json:"security" yaml:"security"`
+	SecurityDefs map[string]securityScheme     `json:"securityDefinitions" yaml:"securityDefinitions"` // Swagger 2.x
+	Components   *specComponents               `json:"components" yaml:"components"`                   // OpenAPI 3.x
 }
 
 type specServer struct {
@@ -183,12 +176,12 @@ type securityScheme struct {
 }
 
 type specOp struct {
-	Summary     string              `json:"summary" yaml:"summary"`
-	OperationID string              `json:"operationId" yaml:"operationId"`
-	Tags        []string            `json:"tags" yaml:"tags"`
-	Parameters  []specParam         `json:"parameters" yaml:"parameters"`
-	RequestBody *specRequestBody    `json:"requestBody" yaml:"requestBody"`
-	Responses   map[string]*specResp `json:"responses" yaml:"responses"`
+	Summary     string                `json:"summary" yaml:"summary"`
+	OperationID string                `json:"operationId" yaml:"operationId"`
+	Tags        []string              `json:"tags" yaml:"tags"`
+	Parameters  []specParam           `json:"parameters" yaml:"parameters"`
+	RequestBody *specRequestBody      `json:"requestBody" yaml:"requestBody"`
+	Responses   map[string]*specResp  `json:"responses" yaml:"responses"`
 	Security    []map[string][]string `json:"security" yaml:"security"`
 }
 
@@ -201,7 +194,7 @@ type specParam struct {
 }
 
 type specRequestBody struct {
-	Required bool                     `json:"required" yaml:"required"`
+	Required bool                      `json:"required" yaml:"required"`
 	Content  map[string]*specMediaType `json:"content" yaml:"content"`
 }
 

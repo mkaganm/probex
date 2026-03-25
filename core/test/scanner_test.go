@@ -76,7 +76,7 @@ func TestScanWithOpenAPISpec(t *testing.T) {
 		switch r.URL.Path {
 		case "/openapi.json":
 			w.Header().Set("Content-Type", "application/json")
-			json.NewEncoder(w).Encode(spec)
+			_ = json.NewEncoder(w).Encode(spec)
 		default:
 			w.WriteHeader(http.StatusNotFound)
 		}
@@ -121,10 +121,10 @@ func TestScanWordlistDiscovery(t *testing.T) {
 		switch r.URL.Path {
 		case "/health":
 			w.Header().Set("Content-Type", "application/json")
-			json.NewEncoder(w).Encode(map[string]string{"status": "ok"})
+			_ = json.NewEncoder(w).Encode(map[string]string{"status": "ok"})
 		case "/users":
 			w.Header().Set("Content-Type", "application/json")
-			json.NewEncoder(w).Encode([]map[string]any{
+			_ = json.NewEncoder(w).Encode([]map[string]any{
 				{"id": 1, "name": "Alice"},
 			})
 		default:

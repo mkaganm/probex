@@ -90,7 +90,7 @@ func (p *Proxy) Start(ctx context.Context) error {
 		<-ctx.Done()
 		shutCtx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 		defer cancel()
-		p.server.Shutdown(shutCtx)
+		_ = p.server.Shutdown(shutCtx)
 	}()
 
 	return p.server.ListenAndServe()
