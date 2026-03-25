@@ -30,8 +30,8 @@ type GRPCService struct {
 type GRPCMethod struct {
 	Name            string `json:"name"`
 	FullName        string `json:"full_name"`
-	ClientStreaming  bool   `json:"client_streaming"`
-	ServerStreaming  bool   `json:"server_streaming"`
+	ClientStreaming bool   `json:"client_streaming"`
+	ServerStreaming bool   `json:"server_streaming"`
 	InputType       string `json:"input_type"`
 	OutputType      string `json:"output_type"`
 }

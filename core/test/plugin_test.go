@@ -131,9 +131,9 @@ func TestPluginRegistryHooks(t *testing.T) {
 func TestPluginRegistryListAll(t *testing.T) {
 	reg := plugin.NewRegistry()
 
-	reg.RegisterGenerator(&mockGenerator{name: "gen1"})
-	reg.RegisterGenerator(&mockGenerator{name: "gen2"})
-	reg.RegisterHook(&mockHook{name: "hook1"})
+	_ = reg.RegisterGenerator(&mockGenerator{name: "gen1"})
+	_ = reg.RegisterGenerator(&mockGenerator{name: "gen2"})
+	_ = reg.RegisterHook(&mockHook{name: "hook1"})
 
 	all := reg.ListAll()
 	if len(all) != 3 {

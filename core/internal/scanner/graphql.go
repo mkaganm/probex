@@ -24,21 +24,21 @@ type GraphQLScanner struct {
 
 // GraphQLType represents a GraphQL type from introspection.
 type GraphQLType struct {
-	Name        string          `json:"name"`
-	Kind        string          `json:"kind"`       // OBJECT, SCALAR, ENUM, INPUT_OBJECT, LIST, NON_NULL
-	Description string          `json:"description"`
-	Fields      []GraphQLField  `json:"fields"`
-	InputFields []GraphQLField  `json:"inputFields"`
-	EnumValues  []GraphQLEnum   `json:"enumValues"`
-	OfType      *GraphQLType    `json:"ofType"`
+	Name        string         `json:"name"`
+	Kind        string         `json:"kind"` // OBJECT, SCALAR, ENUM, INPUT_OBJECT, LIST, NON_NULL
+	Description string         `json:"description"`
+	Fields      []GraphQLField `json:"fields"`
+	InputFields []GraphQLField `json:"inputFields"`
+	EnumValues  []GraphQLEnum  `json:"enumValues"`
+	OfType      *GraphQLType   `json:"ofType"`
 }
 
 // GraphQLField represents a field in a GraphQL type.
 type GraphQLField struct {
-	Name        string          `json:"name"`
-	Description string          `json:"description"`
-	Type        GraphQLTypeRef  `json:"type"`
-	Args        []GraphQLArg    `json:"args"`
+	Name        string         `json:"name"`
+	Description string         `json:"description"`
+	Type        GraphQLTypeRef `json:"type"`
+	Args        []GraphQLArg   `json:"args"`
 }
 
 // GraphQLArg is a GraphQL field argument.

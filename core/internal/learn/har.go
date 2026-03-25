@@ -57,13 +57,13 @@ type Request struct {
 
 // Response is the HTTP response within an entry.
 type Response struct {
-	Status      int       `json:"status"`
-	StatusText  string    `json:"statusText"`
-	HTTPVersion string    `json:"httpVersion"`
-	Headers     []Header  `json:"headers"`
-	Content     Content   `json:"content"`
-	HeadersSize int       `json:"headersSize"`
-	BodySize    int       `json:"bodySize"`
+	Status      int      `json:"status"`
+	StatusText  string   `json:"statusText"`
+	HTTPVersion string   `json:"httpVersion"`
+	Headers     []Header `json:"headers"`
+	Content     Content  `json:"content"`
+	HeadersSize int      `json:"headersSize"`
+	BodySize    int      `json:"bodySize"`
 }
 
 // Header is a name/value pair for HTTP headers.

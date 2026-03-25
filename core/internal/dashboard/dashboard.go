@@ -33,7 +33,9 @@ func (d *Dashboard) handleDashboard(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	tmpl.Execute(w, nil)
+	if err := tmpl.Execute(w, nil); err != nil {
+		http.Error(w, err.Error(), 500)
+	}
 }
 
 func (d *Dashboard) handleAPISummary(w http.ResponseWriter, r *http.Request) {
@@ -41,7 +43,7 @@ func (d *Dashboard) handleAPISummary(w http.ResponseWriter, r *http.Request) {
 
 	summary, err := d.store.LoadResults()
 	if err != nil {
-		json.NewEncoder(w).Encode(map[string]string{"error": "no results"})
+		_ = json.NewEncoder(w).Encode(map[string]string{"error": "no results"})
 		return
 	}
 
@@ -85,7 +87,7 @@ func (d *Dashboard) handleAPISummary(w http.ResponseWriter, r *http.Request) {
 	}
 	resp["by_category"] = byCat
 
-	json.NewEncoder(w).Encode(resp)
+	_ = json.NewEncoder(w).Encode(resp)
 }
 
 func (d *Dashboard) handleAPIRuns(w http.ResponseWriter, r *http.Request) {
@@ -93,7 +95,7 @@ func (d *Dashboard) handleAPIRuns(w http.ResponseWriter, r *http.Request) {
 
 	runs, err := d.store.ListRuns()
 	if err != nil {
-		json.NewEncoder(w).Encode([]any{})
+		_ = json.NewEncoder(w).Encode([]any{})
 		return
 	}
 
@@ -108,7 +110,7 @@ func (d *Dashboard) handleAPIRuns(w http.ResponseWriter, r *http.Request) {
 			Timestamp: run.Timestamp.Format("2006-01-02 15:04:05"),
 		})
 	}
-	json.NewEncoder(w).Encode(entries)
+	_ = json.NewEncoder(w).Encode(entries)
 }
 
 const dashboardHTML = `<!DOCTYPE html>

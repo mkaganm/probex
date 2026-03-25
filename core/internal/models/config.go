@@ -32,19 +32,19 @@ type ScanOptions struct {
 
 // RunOptions configures the test run behavior.
 type RunOptions struct {
-	Concurrency  int            `json:"concurrency" yaml:"concurrency"`
-	Timeout      time.Duration  `json:"timeout" yaml:"timeout"`
-	Categories   []TestCategory `json:"categories,omitempty" yaml:"categories,omitempty"`
-	UseAI        bool           `json:"use_ai" yaml:"use_ai"`
-	StopOnFail   bool           `json:"stop_on_fail" yaml:"stop_on_fail"`
+	Concurrency int            `json:"concurrency" yaml:"concurrency"`
+	Timeout     time.Duration  `json:"timeout" yaml:"timeout"`
+	Categories  []TestCategory `json:"categories,omitempty" yaml:"categories,omitempty"`
+	UseAI       bool           `json:"use_ai" yaml:"use_ai"`
+	StopOnFail  bool           `json:"stop_on_fail" yaml:"stop_on_fail"`
 }
 
 // WatchOptions configures the watch mode.
 type WatchOptions struct {
-	Interval     time.Duration `json:"interval" yaml:"interval"`
-	Endpoints    []string      `json:"endpoints,omitempty" yaml:"endpoints,omitempty"`
-	NotifySlack  string        `json:"notify_slack,omitempty" yaml:"notify_slack,omitempty"`
-	NotifyWebhook string       `json:"notify_webhook,omitempty" yaml:"notify_webhook,omitempty"`
+	Interval      time.Duration `json:"interval" yaml:"interval"`
+	Endpoints     []string      `json:"endpoints,omitempty" yaml:"endpoints,omitempty"`
+	NotifySlack   string        `json:"notify_slack,omitempty" yaml:"notify_slack,omitempty"`
+	NotifyWebhook string        `json:"notify_webhook,omitempty" yaml:"notify_webhook,omitempty"`
 }
 
 // GuardOptions configures the CI guard mode.
@@ -55,10 +55,10 @@ type GuardOptions struct {
 
 // AIConfig configures the AI integration.
 type AIConfig struct {
-	Mode   string      `json:"mode" yaml:"mode"` // local, cloud, hybrid, offline
-	Local  LocalAI     `json:"local" yaml:"local"`
-	Cloud  CloudAI     `json:"cloud" yaml:"cloud"`
-	Budget AIBudget    `json:"budget" yaml:"budget"`
+	Mode   string   `json:"mode" yaml:"mode"` // local, cloud, hybrid, offline
+	Local  LocalAI  `json:"local" yaml:"local"`
+	Cloud  CloudAI  `json:"cloud" yaml:"cloud"`
+	Budget AIBudget `json:"budget" yaml:"budget"`
 }
 
 // LocalAI configures the local AI provider.
@@ -78,14 +78,14 @@ type CloudAI struct {
 
 // AIBudget controls AI spending.
 type AIBudget struct {
-	MaxMonthlyCost      float64 `json:"max_monthly_cost" yaml:"max_monthly_cost"`
-	PreferLocalWhenPossible bool `json:"prefer_local_when_possible" yaml:"prefer_local_when_possible"`
+	MaxMonthlyCost          float64 `json:"max_monthly_cost" yaml:"max_monthly_cost"`
+	PreferLocalWhenPossible bool    `json:"prefer_local_when_possible" yaml:"prefer_local_when_possible"`
 }
 
 // ReportConfig configures report output.
 type ReportConfig struct {
-	Format   string `json:"format" yaml:"format"` // json, junit, html
-	Output   string `json:"output" yaml:"output"` // file path or "stdout"
+	Format string `json:"format" yaml:"format"` // json, junit, html
+	Output string `json:"output" yaml:"output"` // file path or "stdout"
 }
 
 // DefaultConfig returns a Config with sensible defaults.
@@ -119,7 +119,7 @@ func DefaultConfig() Config {
 				Model:    "claude-sonnet-4-6",
 			},
 			Budget: AIBudget{
-				MaxMonthlyCost:      20,
+				MaxMonthlyCost:          20,
 				PreferLocalWhenPossible: true,
 			},
 		},

@@ -159,7 +159,7 @@ func generateAITests(ctx context.Context, profile *models.APIProfile) ([]models.
 	if err := bridge.Start(ctx); err != nil {
 		return nil, fmt.Errorf("starting AI brain: %w", err)
 	}
-	defer bridge.Stop()
+	defer func() { _ = bridge.Stop() }()
 
 	client := ai.NewClient(bridge.Address())
 

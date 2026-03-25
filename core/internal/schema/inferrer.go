@@ -229,4 +229,3 @@ func deepCopySchema(s *models.Schema) *models.Schema {
 	}
 	return &copy
 }
-

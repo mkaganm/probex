@@ -20,14 +20,14 @@ func (r *HTMLReporter) Format() string { return "html" }
 
 // htmlData is the view-model passed to the HTML template.
 type htmlData struct {
-	Summary       *models.RunSummary
-	GeneratedAt   string
-	ScanDate      string
-	DurationStr   string
-	BySeverity    []severityEntry
-	ByCategory    []categoryEntry
-	MaxSeverity   int
-	MaxCategory   int
+	Summary     *models.RunSummary
+	GeneratedAt string
+	ScanDate    string
+	DurationStr string
+	BySeverity  []severityEntry
+	ByCategory  []categoryEntry
+	MaxSeverity int
+	MaxCategory int
 }
 
 type severityEntry struct {
@@ -124,7 +124,7 @@ func (r *HTMLReporter) Generate(summary *models.RunSummary, w io.Writer) error {
 			data.BySeverity = append(data.BySeverity, severityEntry{
 				Name:    string(sev),
 				Count:   count,
-				Percent: float64(count) * 100.0 / float64(summary.TotalTests),
+				Percent: float64(count) * 100.0 / float64(total),
 			})
 			if count > data.MaxSeverity {
 				data.MaxSeverity = count

@@ -17,7 +17,7 @@ func TestGraphQLDetection(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Path == "/graphql" && r.Method == "POST" {
 			w.Header().Set("Content-Type", "application/json")
-			w.Write([]byte(`{"data":{"__typename":"Query"}}`))
+			_, _ = w.Write([]byte(`{"data":{"__typename":"Query"}}`))
 			return
 		}
 		w.WriteHeader(404)
@@ -87,7 +87,7 @@ func TestGraphQLIntrospection(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Path == "/graphql" && r.Method == "POST" {
 			w.Header().Set("Content-Type", "application/json")
-			json.NewEncoder(w).Encode(introspectionResponse)
+			_ = json.NewEncoder(w).Encode(introspectionResponse)
 			return
 		}
 		w.WriteHeader(404)

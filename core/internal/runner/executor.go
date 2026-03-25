@@ -14,9 +14,9 @@ import (
 
 // Executor runs test cases concurrently and collects results.
 type Executor struct {
-	opts      models.RunOptions
-	client    *http.Client
-	asserter  *AssertionEngine
+	opts     models.RunOptions
+	client   *http.Client
+	asserter *AssertionEngine
 }
 
 // New creates a new test Executor.

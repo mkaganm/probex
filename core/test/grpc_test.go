@@ -16,7 +16,7 @@ func TestGRPCDetection(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Path == "/grpc.health.v1.Health/Check" && r.Method == "POST" {
 			w.Header().Set("Content-Type", "application/json")
-			w.Write([]byte(`{"status":"SERVING"}`))
+			_, _ = w.Write([]byte(`{"status":"SERVING"}`))
 			return
 		}
 		w.WriteHeader(404)
@@ -45,7 +45,7 @@ func TestGRPCReflection(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if strings.Contains(r.URL.Path, "ServerReflection") {
 			w.Header().Set("Content-Type", "application/json")
-			w.Write([]byte(`{
+			_, _ = w.Write([]byte(`{
 				"listServicesResponse": {
 					"service": [
 						{"name": "UserService"},

@@ -56,11 +56,6 @@ var massAssignmentFields = []string{
 	"_isAdmin", "privilege", "access_level",
 }
 
-var stackTracePatterns = []string{
-	"at ", "Traceback", "Exception in", "panic:",
-	"goroutine ", "java.lang.", "node_modules/",
-}
-
 // urlFieldNames identifies fields that may contain URLs.
 var urlFieldNames = []string{
 	"url", "link", "href", "callback", "redirect", "webhook",

@@ -225,14 +225,13 @@ func validateAgainstSchema(value any, schema map[string]any) error {
 }
 
 func jsonType(v any) string {
-	switch v.(type) {
+	switch v := v.(type) {
 	case nil:
 		return "null"
 	case bool:
 		return "boolean"
 	case float64:
-		f := v.(float64)
-		if f == float64(int64(f)) {
+		if v == float64(int64(v)) {
 			return "integer"
 		}
 		return "number"
@@ -243,6 +242,7 @@ func jsonType(v any) string {
 	case map[string]any:
 		return "object"
 	default:
+		_ = v
 		return "unknown"
 	}
 }

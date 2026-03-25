@@ -59,9 +59,9 @@ var formatStringPayloads = []struct {
 }
 
 var typeConfusionPayloads = []struct {
-	label    string
-	forType  string
-	value    any
+	label   string
+	forType string
+	value   any
 }{
 	{"number_as_string", "string", 99999},
 	{"bool_as_string", "string", true},
