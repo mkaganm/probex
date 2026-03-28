@@ -4,11 +4,13 @@ import (
 	"context"
 	"encoding/json"
 	"io"
+	"log"
 	"net/http"
 	"os"
 	"strings"
 	"time"
 
+	"github.com/mkaganm/probex/internal/ai"
 	"github.com/mkaganm/probex/internal/generator"
 	"github.com/mkaganm/probex/internal/models"
 	"github.com/mkaganm/probex/internal/runner"
@@ -25,6 +27,13 @@ func (s *Server) registerHandlers(mux *http.ServeMux) {
 	mux.HandleFunc("POST /api/v1/run", s.handleRun)
 	mux.HandleFunc("GET /api/v1/results", s.handleGetResults)
 	mux.HandleFunc("GET /api/v1/results/{id}", s.handleGetResultByID)
+
+	// AI-powered endpoints (require AI brain to be available).
+	mux.HandleFunc("GET /api/v1/ai/health", s.handleAIHealth)
+	mux.HandleFunc("POST /api/v1/ai/scenarios", s.handleAIScenarios)
+	mux.HandleFunc("POST /api/v1/ai/security", s.handleAISecurity)
+	mux.HandleFunc("POST /api/v1/ai/nl-to-test", s.handleAINLToTest)
+	mux.HandleFunc("POST /api/v1/ai/anomaly", s.handleAIAnomaly)
 }
 
 // writeJSON encodes v as JSON and writes it to the response.
@@ -40,10 +49,12 @@ func writeError(w http.ResponseWriter, status int, msg string) {
 }
 
 func (s *Server) handleHealth(w http.ResponseWriter, r *http.Request) {
-	writeJSON(w, http.StatusOK, map[string]string{
-		"status":  "ok",
-		"version": "1.0.0",
-	})
+	resp := map[string]any{
+		"status":     "ok",
+		"version":    "1.0.0",
+		"ai_enabled": s.AIEnabled(),
+	}
+	writeJSON(w, http.StatusOK, resp)
 }
 
 func (s *Server) handleGetProfile(w http.ResponseWriter, r *http.Request) {
@@ -131,6 +142,7 @@ type RunRequest struct {
 	Categories  []string `json:"categories"`
 	Concurrency int      `json:"concurrency"`
 	Timeout     int      `json:"timeout"` // seconds
+	UseAI       bool     `json:"use_ai"`  // include AI-generated scenarios
 }
 
 func (s *Server) handleRun(w http.ResponseWriter, r *http.Request) {
@@ -166,6 +178,21 @@ func (s *Server) handleRun(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		writeError(w, http.StatusInternalServerError, "test generation failed: "+err.Error())
 		return
+	}
+
+	// Augment with AI-generated scenarios if requested and available.
+	if req.UseAI && s.aiClient != nil {
+		aiReq := &ai.ScenarioRequest{
+			Endpoints:    ai.EndpointsToInfo(profile.Endpoints),
+			MaxScenarios: 20,
+		}
+		aiResp, aiErr := s.aiClient.GenerateScenarios(r.Context(), aiReq)
+		if aiErr != nil {
+			log.Printf("[server] AI scenario generation failed (continuing with heuristic tests): %v", aiErr)
+		} else {
+			aiTests := ai.GeneratedTestsToModelTests(aiResp.Scenarios)
+			tests = append(tests, aiTests...)
+		}
 	}
 
 	if len(tests) == 0 {

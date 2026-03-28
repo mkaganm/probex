@@ -40,6 +40,7 @@ data class RunRequest(
     val categories: List<String>? = null,
     val concurrency: Int? = null,
     val timeout: Int? = null,
+    @SerialName("use_ai") val useAi: Boolean = false,
 )
 
 @Serializable
@@ -76,3 +77,48 @@ data class TestResult(
     fun failuresAtSeverity(vararg severities: String): Int =
         severities.sumOf { bySeverity?.getOrDefault(it, 0) ?: 0 }
 }
+
+// --- AI types ---
+
+@Serializable
+data class AIHealthResponse(
+    val status: String,
+    val version: String,
+    @SerialName("ai_mode") val aiMode: String,
+    val model: String,
+)
+
+@Serializable
+data class GeneratedTestCase(
+    val name: String,
+    val description: String = "",
+    val category: String = "",
+    val severity: String = "",
+    val tags: List<String> = emptyList(),
+)
+
+@Serializable
+data class ScenarioRequest(
+    val endpoints: List<Endpoint>,
+    @SerialName("max_scenarios") val maxScenarios: Int = 10,
+)
+
+@Serializable
+data class ScenarioResponse(
+    val scenarios: List<GeneratedTestCase> = emptyList(),
+    @SerialName("model_used") val modelUsed: String = "",
+    @SerialName("tokens_used") val tokensUsed: Int = 0,
+)
+
+@Serializable
+data class NLTestRequest(
+    val description: String,
+    val endpoints: List<Endpoint>? = null,
+)
+
+@Serializable
+data class NLTestResponse(
+    @SerialName("test_cases") val testCases: List<GeneratedTestCase> = emptyList(),
+    @SerialName("model_used") val modelUsed: String = "",
+    @SerialName("tokens_used") val tokensUsed: Int = 0,
+)
