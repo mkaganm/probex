@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import pytest
+import pytest_asyncio
 from httpx import ASGITransport, AsyncClient
 
 import probex_brain.server as server_module
@@ -12,7 +13,7 @@ from probex_brain.server import app
 from .conftest import FakeAIProvider
 
 
-@pytest.fixture
+@pytest_asyncio.fixture
 async def client(fake_router, fake_provider):
     server_module._router = fake_router
     server_module._ai_config = AIConfig(mode="local")
