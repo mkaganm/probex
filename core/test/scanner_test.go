@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
+	"sync"
 	"testing"
 	"time"
 
@@ -476,9 +477,12 @@ func TestScannerNewDefaults(t *testing.T) {
 }
 
 func TestScannerSetAuth(t *testing.T) {
+	var mu sync.Mutex
 	var receivedAuth string
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		mu.Lock()
 		receivedAuth = r.Header.Get("Authorization")
+		mu.Unlock()
 		w.WriteHeader(http.StatusNotFound)
 	}))
 	defer srv.Close()
@@ -487,8 +491,11 @@ func TestScannerSetAuth(t *testing.T) {
 	s.SetAuth("Bearer test-token-123")
 	_, _ = s.Scan(context.Background())
 
-	if receivedAuth != "Bearer test-token-123" {
-		t.Errorf("expected auth header 'Bearer test-token-123', got %q", receivedAuth)
+	mu.Lock()
+	got := receivedAuth
+	mu.Unlock()
+	if got != "Bearer test-token-123" {
+		t.Errorf("expected auth header 'Bearer test-token-123', got %q", got)
 	}
 }
 
