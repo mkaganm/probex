@@ -8,6 +8,13 @@ import (
 	"github.com/spf13/cobra"
 )
 
+// Set by GoReleaser ldflags.
+var (
+	version = "dev"
+	commit  = "none"
+	date    = "unknown"
+)
+
 var (
 	cfgFile string
 	verbose bool
@@ -25,7 +32,7 @@ No test code needed — just point it at your API and let it work.
   $ probex run
   $ probex watch --env staging`,
 	SilenceUsage: true,
-	Version:      "1.0.0",
+	Version:      version,
 }
 
 // Execute runs the root command.

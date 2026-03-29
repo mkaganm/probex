@@ -38,6 +38,7 @@ jobs:
     name: Docker
     runs-on: ubuntu-latest
     needs: [release]
+    if: secrets.DOCKER_USERNAME != ''
     steps:
       - uses: actions/checkout@v4
 

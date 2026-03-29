@@ -1,176 +1,192 @@
 <div align="center">
 
-# PROBEX
+<br>
 
-### Zero-Test API Intelligence Engine
+<h1>
+<code>probex</code>
+</h1>
 
-[![CI](https://github.com/mkaganm/probex/actions/workflows/ci.yml/badge.svg)](https://github.com/mkaganm/probex/actions/workflows/ci.yml)
-[![Go Version](https://img.shields.io/github/go-mod/go-version/mkaganm/probex?filename=core%2Fgo.mod)](https://go.dev/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+<p><strong>Zero-Test API Intelligence Engine</strong></p>
 
-**Discover, learn, and autonomously test your APIs. No test code needed.**
+<p>
+<a href="https://github.com/mkaganm/probex/actions/workflows/ci.yml"><img src="https://github.com/mkaganm/probex/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+<a href="https://go.dev/"><img src="https://img.shields.io/github/go-mod/go-version/mkaganm/probex?filename=core%2Fgo.mod&style=flat-square" alt="Go"></a>
+<a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue?style=flat-square" alt="License"></a>
+</p>
 
-[Getting Started](docs/getting-started.md) &bull; [Architecture](docs/architecture.md) &bull; [Configuration](docs/configuration.md) &bull; [SDKs](#sdk-integration) &bull; [Contributing](#contributing)
+<p>Point at any API. Get tests. Automatically.</p>
+
+<p>
+<a href="docs/getting-started.md">Getting Started</a> &nbsp;&middot;&nbsp;
+<a href="docs/architecture.md">Architecture</a> &nbsp;&middot;&nbsp;
+<a href="docs/configuration.md">Configuration</a> &nbsp;&middot;&nbsp;
+<a href="#sdk-integration">SDKs</a> &nbsp;&middot;&nbsp;
+<a href="#contributing">Contributing</a>
+</p>
+
+<br>
 
 </div>
 
----
+```bash
+$ probex scan https://api.example.com
+  Discovered 47 endpoints (OpenAPI + crawl + wordlist)
+
+$ probex run
+  Generated 312 tests across 9 categories
+  ✓ 298 passed  ✗ 8 failed  ⚠ 6 warnings
+```
+
+<br>
+
+## Why?
+
+Most API testing tools require you to write tests. PROBEX doesn't.
+
+| | Traditional | PROBEX |
+|:---|:---|:---|
+| **Setup** | Hours writing test code | `probex scan` + `probex run` |
+| **Coverage** | Only what you remember to test | OWASP Top 10, edge cases, fuzzing, concurrency |
+| **Maintenance** | Tests break when API changes | Re-scan — tests regenerate |
+| **AI** | Manual prompt engineering | Built-in scenario gen, security analysis, NL-to-test |
+| **Protocols** | REST only | REST, GraphQL, WebSocket, gRPC |
+
+<br>
+
+## How it works
+
+```
+  SCAN             LEARN            GENERATE          RUN              WATCH
+  ────             ─────            ────────          ───              ─────
+  OpenAPI specs    Traffic replay   Happy path        Concurrent       Anomaly detection
+  Link crawling    Schema inference Edge cases        Assertions       Schema drift
+  Wordlist probe   Auth detection   OWASP security    HTML/XML/JSON    Regression alerts
+  GraphQL intro    Pattern mining   Mutation fuzzing   CI/CD gating     Webhook/Slack
+  WebSocket probe  Baseline build   Race conditions   Dashboard        Continuous
+  gRPC reflection                   AI scenarios
+```
+
+> *The best test is the one never written.*
+
+<br>
+
+## Quick start
 
 ```bash
-probex scan https://api.example.com
-probex run
-# Done. 60+ tests generated and executed automatically.
-```
-
-## Why PROBEX?
-
-| | Traditional API Testing | PROBEX |
-|---|---|---|
-| **Setup time** | Hours/days writing test code | Seconds — just point at your API |
-| **Coverage** | What you think to test | OWASP Top 10, edge cases, fuzzing, concurrency — automatically |
-| **Maintenance** | Tests break when API changes | Re-scan and tests adapt |
-| **AI** | Manual prompt engineering | Built-in AI scenarios, security analysis, NL-to-test |
-| **Protocols** | Usually REST only | REST, GraphQL, WebSocket, gRPC |
-
-## How It Works
-
-```
-  Scan          Learn          Generate        Run           Watch
-  ─────         ─────          ────────        ───           ─────
-  OpenAPI       Traffic        Happy path      Concurrent    Anomaly
-  Crawling      Schemas        Edge cases      Assertions    Schema drift
-  Wordlists     Auth detect    Security        Reports       Regression
-  GraphQL       Patterns       Fuzzing         CI/CD gate    Alerts
-  WebSocket     Baselines      Concurrency     Dashboard     Webhooks
-  gRPC                         AI scenarios
-```
-
-> **"En iyi test, hic yazilmayan testtir."** — The best test is the one never written.
-
-## Quick Start
-
-### Install
-
-```bash
-# From source
+# Install from source
 git clone https://github.com/mkaganm/probex.git
 cd probex && make build
-# Binary at ./bin/probex
 
-# Docker
+# Or use Docker
 docker run probex/probex scan https://api.example.com
 ```
 
-### First Run
-
 ```bash
-# 1. Discover endpoints
-probex scan https://api.example.com
-
-# 2. Run auto-generated tests
-probex run
-
-# 3. Generate HTML report
-probex report --format html --output report.html
-
-# 4. AI-powered testing (requires Python brain)
-probex run --ai
-
-# 5. Natural language test generation
-probex test "non-admin users should not access /admin endpoints"
+probex scan https://api.example.com          # Discover endpoints
+probex run                                    # Generate & run tests
+probex report --format html -o report.html   # HTML report
+probex run --ai                               # AI-augmented testing
+probex test "admins only on /admin/*"        # Natural language tests
 ```
+
+<br>
 
 ## Architecture
 
 ```
-┌──────────────────────────────────────────────────────────┐
-│                    PROBEX Server (:9712)                  │
-│                                                          │
-│  ┌─────────────┐     ┌──────────────┐                   │
-│  │   Go CLI    │────▶│ Python Brain │  AI-powered        │
-│  │   probex    │◀────│  FastAPI     │  analysis           │
-│  └──────┬──────┘     └──────────────┘                   │
-│         │                   ▲                            │
-│         │  Core API         │ AI proxy                   │
-│         │  /api/v1/*        │ /api/v1/ai/*               │
-│         │                   │                            │
-└─────────┼───────────────────┼────────────────────────────┘
-          │                   │
-     ┌────┼────────────┬──────┼───────┐
-     ▼    ▼            ▼      ▼       ▼
-  ┌────┐┌──────┐┌──────────┐┌────────────┐
-  │ JS ││ Java ││  Kotlin  ││  VS Code   │
-  │ SDK││ SDK  ││   SDK    ││ Extension  │
-  └────┘└──────┘└──────────┘└────────────┘
+┌──────────────────────────────────────────────────────┐
+│                 PROBEX Server (:9712)                 │
+│                                                      │
+│   ┌───────────┐          ┌──────────────┐            │
+│   │  Go CLI   │ ───────▶ │ Python Brain │            │
+│   │  probex   │ ◀─────── │ FastAPI      │            │
+│   └─────┬─────┘          └──────────────┘            │
+│         │                       ▲                    │
+│    /api/v1/*               /api/v1/ai/*              │
+│         │                       │                    │
+└─────────┼───────────────────────┼────────────────────┘
+          │                       │
+   ┌──────┼──────────┬────────────┼──────┐
+   ▼      ▼          ▼            ▼      ▼
+ ┌────┐ ┌──────┐ ┌────────┐ ┌────────────┐
+ │ JS │ │ Java │ │ Kotlin │ │  VS Code   │
+ │ SDK│ │ SDK  │ │  SDK   │ │ Extension  │
+ └────┘ └──────┘ └────────┘ └────────────┘
 ```
 
-| Component | Directory | Description |
-|-----------|-----------|-------------|
-| Go Core | `core/` | CLI, scanner, 9 generators, runner, server, dashboard |
-| Python Brain | `brain/` | AI analysis via Ollama (local) or Claude (cloud) |
-| JS/TS SDK | `sdk-js/` | npm package, Jest/Vitest plugins, GitHub Actions |
-| Java SDK | `sdk-java/` | Maven SDK, JUnit 5 extension, Maven/Gradle plugins |
-| Kotlin SDK | `sdk-kotlin/` | Coroutine client with DSL |
+| Component | Path | Stack |
+|:----------|:-----|:------|
+| **Core CLI** | `core/` | Go &mdash; Cobra CLI, 9 test generators, concurrent runner, REST server |
+| **AI Brain** | `brain/` | Python &mdash; FastAPI, Ollama (local) or Claude (cloud) |
+| **JS/TS SDK** | `sdk-js/` | TypeScript &mdash; npm client, Jest/Vitest plugins, GitHub Action |
+| **Java SDK** | `sdk-java/` | Java 17 &mdash; SDK, JUnit 5 extension, Maven & Gradle plugins |
+| **Kotlin SDK** | `sdk-kotlin/` | Kotlin &mdash; coroutine client, DSL, JUnit helper |
 
-## CLI Commands
+<br>
 
-| Command | Description |
-|:--------|:------------|
-| `probex scan <url>` | Discover API endpoints (OpenAPI, crawl, GraphQL, WebSocket, gRPC) |
-| `probex run [--ai]` | Generate and execute tests; `--ai` adds AI-powered scenarios |
-| `probex test "<description>"` | AI natural language test generation |
-| `probex watch` | Continuous monitoring for anomalies and schema drift |
-| `probex guard` | CI/CD gate with severity-based exit codes |
-| `probex learn --from-traffic *.har` | Learn patterns from captured traffic |
-| `probex report --format html` | Generate reports (JSON, JUnit XML, HTML) |
-| `probex proxy <url>` | Reverse proxy for live traffic capture |
-| `probex discover ./infra` | Discover endpoints from Terraform, K8s, Docker Compose |
-| `probex graph` | Visualize endpoint relationships (ASCII, Graphviz DOT) |
-| `probex collective push\|pull` | Anonymous community pattern sharing |
-| `probex config init` | Initialize `probex.yaml` configuration |
+## Commands
+
+| Command | What it does |
+|:--------|:-------------|
+| `probex scan <url>` | Discover endpoints via OpenAPI, crawl, wordlist, GraphQL, WebSocket, gRPC |
+| `probex run [--ai]` | Generate and execute tests &mdash; `--ai` adds AI-powered scenarios |
+| `probex test "<text>"` | Generate tests from natural language description |
+| `probex watch` | Continuous monitoring &mdash; anomaly detection, schema drift, alerts |
+| `probex guard` | CI/CD quality gate with severity-based exit codes |
+| `probex learn --from-traffic *.har` | Learn API patterns from captured HTTP traffic |
+| `probex report --format html` | Generate reports in JSON, JUnit XML, or HTML |
+| `probex proxy <url>` | Reverse proxy that captures live traffic |
+| `probex discover ./infra` | Find endpoints in Terraform, Kubernetes, Docker Compose files |
+| `probex graph` | Visualize endpoint relationships (ASCII or Graphviz DOT) |
+| `probex collective push\|pull` | Share and pull anonymous community test patterns |
+| `probex config init` | Generate default `probex.yaml` |
 | `probex serve [--ai]` | Start REST API server for SDK integration |
 
-## Test Categories
+<br>
 
-PROBEX generates tests across **9 categories** automatically:
+## Test categories
 
-| Category | What It Tests |
-|:---------|:-------------|
-| **Happy Path** | Status codes, schema validation, response times |
+PROBEX generates tests across **9 categories** without any configuration:
+
+| Category | Coverage |
+|:---------|:---------|
+| **Happy Path** | Status codes, schema validation, response time thresholds |
 | **Edge Cases** | Empty bodies, missing fields, wrong types, boundary values |
-| **Security** | OWASP API Top 10 — BOLA, broken auth, mass assignment, SSRF, injection |
-| **Fuzzing** | Mutation-based, special characters, type confusion |
-| **Relationships** | CRUD cycles, cascade behavior, referential integrity |
-| **Concurrency** | Race conditions, idempotency, double-submit |
-| **GraphQL** | Introspection, depth limiting, batch/alias attacks |
-| **WebSocket** | Handshake validation, CSWSH, auth checks |
-| **gRPC** | Reflection security, streaming, content-type validation |
+| **Security** | OWASP API Top 10 &mdash; BOLA, broken auth, mass assignment, SSRF, injection |
+| **Fuzzing** | Mutation-based payloads, special characters, type confusion |
+| **Relationships** | CRUD lifecycle, cascade deletes, referential integrity |
+| **Concurrency** | Race conditions, idempotency, double-submit prevention |
+| **GraphQL** | Introspection leaks, depth attacks, batch/alias abuse |
+| **WebSocket** | Handshake validation, CSWSH, message auth |
+| **gRPC** | Reflection exposure, streaming abuse, content-type enforcement |
 
-## AI Features
+<br>
 
-Start the server with AI support to unlock intelligent testing:
+## AI features
 
 ```bash
-probex serve --ai                        # Managed brain subprocess (Ollama)
-probex serve --ai-url http://brain:9711  # External brain instance
+probex serve --ai                        # Start with managed Ollama brain
+probex serve --ai-url http://brain:9711  # Connect to external brain
 ```
 
 | Feature | Endpoint | Description |
 |:--------|:---------|:------------|
-| Scenario Generation | `POST /api/v1/ai/scenarios` | AI generates test scenarios from endpoint specs |
-| Security Analysis | `POST /api/v1/ai/security` | Deep OWASP analysis with remediation advice |
-| NL-to-Test | `POST /api/v1/ai/nl-to-test` | "Test that non-admins can't access /admin" |
-| Anomaly Classification | `POST /api/v1/ai/anomaly` | AI classifies runtime anomalies |
+| **Scenario Generation** | `POST /api/v1/ai/scenarios` | Generate test scenarios from endpoint specifications |
+| **Security Analysis** | `POST /api/v1/ai/security` | OWASP-focused analysis with remediation advice |
+| **NL-to-Test** | `POST /api/v1/ai/nl-to-test` | Convert plain English to executable test cases |
+| **Anomaly Classification** | `POST /api/v1/ai/anomaly` | Classify runtime anomalies with severity scoring |
 
-Supports **Ollama** (local, private) and **Anthropic Claude** (cloud) as AI providers.
+**Providers:** [Ollama](https://ollama.ai) (local, private, free) or [Anthropic Claude](https://anthropic.com) (cloud, higher quality).
 
-## SDK Integration
+<br>
+
+## SDK integration
 
 <table>
 <tr>
-<td><b>JavaScript/TypeScript</b></td>
-<td><b>Java</b></td>
-<td><b>Kotlin</b></td>
+<th>JavaScript / TypeScript</th>
+<th>Java</th>
+<th>Kotlin</th>
 </tr>
 <tr>
 <td>
@@ -180,10 +196,9 @@ import { ProbexClient } from '@probex/sdk';
 
 const client = new ProbexClient();
 const results = await client.run();
-console.log(`${results.passed} passed`);
 
-// AI scenarios
-const ai = await client.aiScenarios({
+// AI-powered scenarios
+const scenarios = await client.aiScenarios({
   endpoints,
   max_scenarios: 10,
 });
@@ -195,9 +210,8 @@ const ai = await client.aiScenarios({
 ```java
 var client = new ProbexClient();
 var result = client.run();
-assert result.isSuccess();
 
-// AI scenarios
+// AI-powered scenarios
 var scenarios = client.aiScenarios(
   new ScenarioRequest(endpoints, 10)
 );
@@ -209,9 +223,8 @@ var scenarios = client.aiScenarios(
 ```kotlin
 val client = ProbexClient()
 val result = client.run()
-assert(result.isSuccess)
 
-// AI scenarios
+// AI-powered scenarios
 val scenarios = client.aiScenarios(
   ScenarioRequest(endpoints, 10)
 )
@@ -222,11 +235,13 @@ client.close()
 </tr>
 </table>
 
-> See full docs: [JS/TS SDK](docs/sdk-js.md) | [Java SDK](docs/sdk-java.md) | [Kotlin SDK](docs/sdk-kotlin.md)
+Docs: [JS/TS](docs/sdk-js.md) &nbsp;&middot;&nbsp; [Java](docs/sdk-java.md) &nbsp;&middot;&nbsp; [Kotlin](docs/sdk-kotlin.md)
 
-## CI/CD Integration
+<br>
 
-### GitHub Actions
+## CI/CD
+
+**GitHub Actions:**
 
 ```yaml
 - uses: probex/action@v1
@@ -235,29 +250,25 @@ client.close()
     fail-on: critical,high
 ```
 
-### Generic CI
+**Any CI:**
 
 ```bash
 probex scan $API_URL
 probex guard --fail-on critical,high --report-file results.xml
+# Exit 0 = pass, 1 = threshold exceeded, 2 = error
 ```
 
-### Guard Exit Codes
-
-| Code | Meaning |
-|:-----|:--------|
-| `0` | All tests passed |
-| `1` | Failures at or above threshold severity |
-| `2` | Scan or execution error |
+<br>
 
 ## Configuration
 
 ```bash
-probex config init  # Creates probex.yaml
+probex config init   # Creates probex.yaml with sensible defaults
 ```
 
 <details>
-<summary><b>Example probex.yaml</b></summary>
+<summary>Example <code>probex.yaml</code></summary>
+<br>
 
 ```yaml
 version: "1"
@@ -272,7 +283,7 @@ run:
 guard:
   fail_on: [critical, high]
 ai:
-  mode: offline  # offline | local | cloud | hybrid
+  mode: offline   # offline | local | cloud | hybrid
   local:
     provider: ollama
     model: qwen3:4b
@@ -283,58 +294,48 @@ report:
 
 </details>
 
+<br>
+
 ## Documentation
 
-| Document | Description |
-|:---------|:------------|
+| | |
+|:--|:--|
 | [Getting Started](docs/getting-started.md) | Installation, first scan, quick start |
-| [Architecture](docs/architecture.md) | System design, REST API, pipelines |
-| [Configuration](docs/configuration.md) | `probex.yaml` reference, AI modes, env vars |
-| [Security Testing](docs/security.md) | OWASP API Top 10 coverage |
-| [JS/TS SDK](docs/sdk-js.md) | npm client, Jest/Vitest, GitHub Actions |
-| [Java SDK](docs/sdk-java.md) | Maven/Gradle, JUnit 5, plugins |
-| [Kotlin SDK](docs/sdk-kotlin.md) | Coroutine client, DSL, JUnit helper |
-| [Plugins](docs/plugins.md) | Go interface + HTTP JSON-RPC plugins |
-| [IaC Discovery](docs/iac-discovery.md) | Terraform, K8s, Docker Compose scanning |
-| [Collective Intelligence](docs/collective.md) | Anonymous community patterns |
+| [Architecture](docs/architecture.md) | System design, REST API reference, pipelines |
+| [Configuration](docs/configuration.md) | `probex.yaml` reference, AI modes, environment variables |
+| [Security Testing](docs/security.md) | OWASP API Top 10 test coverage |
+| [Plugins](docs/plugins.md) | Go interface and HTTP JSON-RPC external plugins |
+| [IaC Discovery](docs/iac-discovery.md) | Terraform, Kubernetes, Docker Compose scanning |
+| [Collective Intelligence](docs/collective.md) | Anonymous community pattern sharing |
+
+<br>
 
 ## Contributing
 
-Contributions are welcome! Please:
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feat/my-feature`)
-3. Commit your changes (`git commit -m 'feat: add my feature'`)
-4. Push to the branch (`git push origin feat/my-feature`)
+1. Fork the repo
+2. Create your branch &mdash; `git checkout -b feat/something`
+3. Commit &mdash; `git commit -m 'feat: add something'`
+4. Push &mdash; `git push origin feat/something`
 5. Open a Pull Request
 
-### Development Setup
+**Development:**
 
 ```bash
-# Go core
-cd core && go test ./...
-
-# Python brain
-cd brain && pip install -e ".[dev]" && pytest
-
-# JS SDK
-cd sdk-js && npm install && npx tsc --noEmit
-
-# Java SDK
-cd sdk-java && mvn test
-
-# All at once
-make test-all
+cd core && go test ./...                    # Go tests (220 tests)
+cd brain && pip install -e ".[dev]" && pytest  # Python tests (42 tests)
+cd sdk-js && npm install && npx tsc --noEmit   # JS typecheck
+cd sdk-java && mvn test                        # Java tests
+make test-all                                  # Everything
 ```
+
+<br>
 
 ## License
 
-[MIT](LICENSE) &mdash; use it however you want.
+[MIT](LICENSE)
 
----
+<br>
 
 <div align="center">
-
-**[probex.dev](https://github.com/mkaganm/probex)** &bull; Built with Go, Python, and a lot of API curiosity.
-
+<sub>Built with Go, Python, and a stubborn belief that APIs should test themselves.</sub>
 </div>
