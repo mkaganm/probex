@@ -7,7 +7,6 @@
 [![CI](https://github.com/mkaganm/probex/actions/workflows/ci.yml/badge.svg)](https://github.com/mkaganm/probex/actions/workflows/ci.yml)
 [![Go Version](https://img.shields.io/github/go-mod/go-version/mkaganm/probex?filename=core%2Fgo.mod)](https://go.dev/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Release](https://img.shields.io/github/v/release/mkaganm/probex?include_prereleases)](https://github.com/mkaganm/probex/releases)
 
 **Discover, learn, and autonomously test your APIs. No test code needed.**
 
