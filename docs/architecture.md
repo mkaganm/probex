@@ -184,15 +184,22 @@ When `probex serve` is running, SDKs communicate via:
 
 | Method | Path | Description |
 |--------|------|-------------|
-| GET | `/api/v1/health` | Server health check |
+| GET | `/api/v1/health` | Server health check (includes `ai_enabled` field) |
 | POST | `/api/v1/scan` | Trigger a scan |
 | GET | `/api/v1/profile` | Get current API profile |
-| POST | `/api/v1/run` | Run tests |
+| POST | `/api/v1/run` | Run tests (`use_ai: true` for AI-augmented runs) |
 | GET | `/api/v1/results` | Get latest results |
 | GET | `/api/v1/results/{id}` | Get specific run results |
+| GET | `/api/v1/ai/health` | AI brain health check (returns 503 if AI not configured) |
+| POST | `/api/v1/ai/scenarios` | Generate AI-powered test scenarios |
+| POST | `/api/v1/ai/security` | AI security analysis |
+| POST | `/api/v1/ai/nl-to-test` | Natural language to test conversion |
+| POST | `/api/v1/ai/anomaly` | AI anomaly classification |
 | GET | `/dashboard` | Web dashboard |
 | GET | `/dashboard/api/summary` | Dashboard summary data |
 | GET | `/dashboard/api/runs` | Dashboard run history |
+
+The AI endpoints (`/api/v1/ai/*`) are proxy endpoints — the Go server forwards requests to the Python brain and returns the response. If the brain is not configured, these endpoints return `503 Service Unavailable`. Start the server with AI support using `probex serve --ai` (managed subprocess) or `probex serve --ai-url http://brain:9711` (external brain).
 
 ## Plugin System
 

@@ -85,6 +85,29 @@ runBlocking {
 }
 ```
 
+## AI-Powered Testing
+
+Access AI features when the server runs with AI support (`probex serve --ai`).
+
+```kotlin
+val client = ProbexClient("http://localhost:9712")
+
+// Check AI availability
+val aiHealth = client.aiHealth()
+println("AI mode: ${aiHealth.aiMode}, Model: ${aiHealth.model}")
+
+// Generate test scenarios
+val endpoints = listOf(Endpoint(method = "GET", path = "/api/users"))
+val scenarios = client.aiScenarios(ScenarioRequest(endpoints, maxScenarios = 10))
+println("Generated ${scenarios.scenarios.size} scenarios")
+
+// Natural language to test
+val nlTests = client.aiNLToTest(NLTestRequest("Verify rate limiting on POST endpoints"))
+println("Generated ${nlTests.testCases.size} tests")
+
+client.close()
+```
+
 ## API Reference
 
 ### `ProbexClient`
@@ -96,6 +119,9 @@ runBlocking {
 | `suspend run(RunRequest)` | `TestResult` | Run tests |
 | `suspend getProfile()` | `ScanResult` | Get current profile |
 | `suspend getResults()` | `TestResult` | Get latest results |
+| `suspend aiHealth()` | `AIHealthResponse` | AI brain health check |
+| `suspend aiScenarios(ScenarioRequest)` | `ScenarioResponse` | Generate AI test scenarios |
+| `suspend aiNLToTest(NLTestRequest)` | `NLTestResponse` | Natural language to tests |
 | `close()` | — | Close HTTP client |
 
 ### `TestResult`

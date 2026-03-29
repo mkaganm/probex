@@ -73,13 +73,14 @@ probex test "non-admin users should not access /admin endpoints"
 ```
 ┌─────────────┐     ┌──────────────┐
 │   Go CLI    │────▶│ Python Brain │  (AI-powered analysis)
-│   probex    │◀────│  FastAPI/gRPC │
+│   probex    │◀────│  FastAPI     │
 └──────┬──────┘     └──────────────┘
-       │
-       │  REST API (localhost:9712)
-       │
-  ┌────┼────────────┬──────────────┐
-  ▼    ▼            ▼              ▼
+       │                   ▲
+       │  REST API         │ AI proxy
+       │  localhost:9712   │ /api/v1/ai/*
+       │                   │
+  ┌────┼────────────┬──────┼───────┐
+  ▼    ▼            ▼      ▼       ▼
 ┌────┐┌──────┐┌──────────┐┌────────────┐
 │ JS ││ Java ││  Kotlin  ││  VS Code   │
 │ SDK││ SDK  ││   SDK    ││ Extension  │
@@ -92,6 +93,8 @@ probex test "non-admin users should not access /admin endpoints"
 - **Java SDK** (`sdk-java/`) — Maven SDK + Maven/Gradle plugins
 - **Kotlin SDK** (`sdk-kotlin/`) — Coroutine-based client with DSL
 - **VS Code Extension** (`vscode-extension/`) — Sidebar views, commands, endpoint graph
+
+SDKs access AI features through the Go server's `/api/v1/ai/*` proxy endpoints — no direct connection to the Python brain needed.
 
 ## CLI Commands
 
@@ -130,11 +133,15 @@ PROBEX generates tests across 9 categories:
 ### JavaScript/TypeScript
 
 ```javascript
-import { Probex } from '@probex/sdk';
+import { ProbexClient } from '@probex/sdk';
 
-const client = new Probex('http://localhost:9712');
-const results = await client.run({ baseUrl: 'https://api.example.com' });
+const client = new ProbexClient('http://localhost:9712');
+const results = await client.run();
 console.log(`${results.passed} passed, ${results.failed} failed`);
+
+// AI-powered test generation
+const scenarios = await client.aiScenarios({ endpoints, max_scenarios: 10 });
+const security = await client.aiSecurity({ endpoints, depth: 'deep' });
 ```
 
 ### Java
@@ -143,16 +150,21 @@ console.log(`${results.passed} passed, ${results.failed} failed`);
 var client = new ProbexClient("http://localhost:9712");
 var result = client.run();
 assertThat(result.getFailed()).isZero();
+
+// AI-powered scenarios
+var scenarios = client.aiScenarios(new ScenarioRequest(endpoints, 10));
 ```
 
 ### Kotlin
 
 ```kotlin
-val result = probex("http://localhost:9712") {
-    scan("https://api.example.com")
-    run()
-}
+val client = ProbexClient("http://localhost:9712")
+val result = client.run()
 assert(result.isSuccess)
+
+// AI-powered scenarios
+val scenarios = client.aiScenarios(ScenarioRequest(endpoints, maxScenarios = 10))
+client.close()
 ```
 
 ## Configuration

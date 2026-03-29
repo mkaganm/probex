@@ -318,11 +318,11 @@ func TestProxyCaptureRequestHeaders(t *testing.T) {
 	}
 
 	c := caps[0]
-	if c.Headers["X-Custom-Header"] != "custom-value" {
-		t.Errorf("X-Custom-Header: got %q, want %q", c.Headers["X-Custom-Header"], "custom-value")
+	if c.Headers["x-custom-header"] != "custom-value" {
+		t.Errorf("x-custom-header: got %q, want %q", c.Headers["x-custom-header"], "custom-value")
 	}
-	if c.Headers["Authorization"] != "Bearer token123" {
-		t.Errorf("Authorization: got %q, want %q", c.Headers["Authorization"], "Bearer token123")
+	if c.Headers["authorization"] != "Bearer token123" {
+		t.Errorf("authorization: got %q, want %q", c.Headers["authorization"], "Bearer token123")
 	}
 }
 
@@ -346,11 +346,11 @@ func TestProxyCaptureResponseHeaders(t *testing.T) {
 	time.Sleep(50 * time.Millisecond)
 
 	c := p.Captures()[0]
-	if c.RespHeaders["Content-Type"] != "application/json" {
-		t.Errorf("response Content-Type: got %q", c.RespHeaders["Content-Type"])
+	if c.RespHeaders["content-type"] != "application/json" {
+		t.Errorf("response content-type: got %q", c.RespHeaders["content-type"])
 	}
-	if c.RespHeaders["X-Request-Id"] != "req-abc-123" {
-		t.Errorf("response X-Request-Id: got %q", c.RespHeaders["X-Request-Id"])
+	if c.RespHeaders["x-request-id"] != "req-abc-123" {
+		t.Errorf("response x-request-id: got %q", c.RespHeaders["x-request-id"])
 	}
 }
 
@@ -437,30 +437,27 @@ func TestProxyToHAREntries(t *testing.T) {
 	// Verify request headers are present.
 	foundAccept := false
 	for _, h := range e.Request.Headers {
-		if h.Name == "Accept" && h.Value == "application/json" {
+		if h.Name == "accept" && h.Value == "application/json" {
 			foundAccept = true
 		}
 	}
 	if !foundAccept {
-		t.Error("expected Accept header in HAR request headers")
+		t.Error("expected accept header in HAR request headers")
 	}
 
 	// Verify response headers are present.
 	foundTrace := false
 	for _, h := range e.Response.Headers {
-		if h.Name == "X-Trace" && h.Value == "trace-1" {
+		if h.Name == "x-trace" && h.Value == "trace-1" {
 			foundTrace = true
 		}
 	}
 	if !foundTrace {
-		t.Error("expected X-Trace header in HAR response headers")
+		t.Error("expected x-trace header in HAR response headers")
 	}
 
-	// Note: proxy.copyHeaders preserves Go's canonical header keys (e.g. "Content-Type"),
-	// but ToHAREntries looks up "content-type" (lowercase). This is a known proxy bug.
-	// For now, just verify the content text is present.
-	if e.Response.Content.Text == "" {
-		t.Error("expected non-empty HAR response content text")
+	if e.Response.Content.MimeType != "application/json" {
+		t.Errorf("expected MimeType %q, got %q", "application/json", e.Response.Content.MimeType)
 	}
 }
 

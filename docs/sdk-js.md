@@ -101,6 +101,47 @@ jobs:
 | `categories` | Test categories to run | (all) |
 | `max-depth` | Scan depth | `3` |
 
+## AI-Powered Testing
+
+The SDK provides access to AI features when the PROBEX server is running with AI support (`probex serve --ai`).
+
+```typescript
+const client = new ProbexClient('http://localhost:9712');
+
+// Check AI availability
+const aiHealth = await client.aiHealth();
+console.log(`AI mode: ${aiHealth.ai_mode}, Model: ${aiHealth.model}`);
+
+// Generate test scenarios from endpoints
+const scenarios = await client.aiScenarios({
+  endpoints: [{ method: 'GET', path: '/api/users', base_url: 'http://localhost:3000' }],
+  max_scenarios: 10,
+});
+console.log(`Generated ${scenarios.scenarios.length} scenarios`);
+
+// Security analysis
+const security = await client.aiSecurity({
+  endpoints: [{ method: 'POST', path: '/api/login', base_url: 'http://localhost:3000' }],
+  depth: 'deep',
+});
+security.findings.forEach(f => console.log(`[${f.severity}] ${f.title}`));
+
+// Natural language to test
+const nlTests = await client.aiNLToTest({
+  description: 'Verify that non-admin users cannot access /admin endpoints',
+});
+
+// Anomaly classification
+const anomaly = await client.aiAnomaly({
+  endpoint_id: '/api/users',
+  observed_status: 500,
+  expected_status: 200,
+  response_time_ms: 5000,
+  baseline_time_ms: 100,
+});
+console.log(`${anomaly.classification}: ${anomaly.explanation}`);
+```
+
 ## API Reference
 
 ### `ProbexClient`
@@ -112,3 +153,8 @@ jobs:
 | `run(categories?)` | `TestResult` | Run tests |
 | `getProfile()` | `ScanResult` | Get current profile |
 | `getResults()` | `TestResult` | Get latest results |
+| `aiHealth()` | `AIHealthResponse` | AI brain health check |
+| `aiScenarios(req)` | `ScenarioResponse` | Generate AI test scenarios |
+| `aiSecurity(req)` | `SecurityAnalysisResponse` | AI security analysis |
+| `aiNLToTest(req)` | `NLTestResponse` | Natural language to tests |
+| `aiAnomaly(req)` | `AnomalyClassifyResponse` | AI anomaly classification |
