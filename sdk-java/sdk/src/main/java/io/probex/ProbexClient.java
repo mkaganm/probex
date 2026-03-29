@@ -70,6 +70,23 @@ public class ProbexClient {
         return doGet("/api/v1/results", TestResult.class);
     }
 
+    // --- AI endpoints ---
+
+    /** Check AI brain health. */
+    public HealthResponse aiHealth() throws ProbexException {
+        return doGet("/api/v1/ai/health", HealthResponse.class);
+    }
+
+    /** Generate AI-powered test scenarios. */
+    public ScenarioResponse aiScenarios(ScenarioRequest request) throws ProbexException {
+        return doPost("/api/v1/ai/scenarios", request, ScenarioResponse.class);
+    }
+
+    /** Generate tests from natural language description. */
+    public NLTestResponse aiNLToTest(NLTestRequest request) throws ProbexException {
+        return doPost("/api/v1/ai/nl-to-test", request, NLTestResponse.class);
+    }
+
     private <T> T doGet(String path, Class<T> responseType) throws ProbexException {
         try {
             var request = HttpRequest.newBuilder()

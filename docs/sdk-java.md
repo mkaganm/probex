@@ -117,6 +117,27 @@ probex {
 ./gradlew probexReport  # Generate report
 ```
 
+## AI-Powered Testing
+
+Access AI features when the server runs with AI support (`probex serve --ai`).
+
+```java
+var client = new ProbexClient("http://localhost:9712");
+
+// Check AI availability
+var aiHealth = client.aiHealth();
+System.out.println("AI mode: " + aiHealth.getAiMode());
+
+// Generate test scenarios
+var endpoints = List.of(new Endpoint("GET", "/api/users", "http://localhost:8080"));
+var scenarios = client.aiScenarios(new ScenarioRequest(endpoints, 10));
+System.out.println("Generated " + scenarios.getScenarios().size() + " scenarios");
+
+// Natural language to test
+var nlTests = client.aiNLToTest(new NLTestRequest("Verify admin-only endpoints reject non-admin users"));
+System.out.println("Generated " + nlTests.getTestCases().size() + " tests");
+```
+
 ## API Reference
 
 ### `ProbexClient`
@@ -129,6 +150,9 @@ probex {
 | `run()` | `TestResult` | Run tests with defaults |
 | `getProfile()` | `ScanResult` | Get current profile |
 | `getResults()` | `TestResult` | Get latest results |
+| `aiHealth()` | `HealthResponse` | AI brain health check |
+| `aiScenarios(ScenarioRequest)` | `ScenarioResponse` | Generate AI test scenarios |
+| `aiNLToTest(NLTestRequest)` | `NLTestResponse` | Natural language to tests |
 
 ### `TestResult`
 

@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"net/http/httputil"
 	"net/url"
+	"strings"
 	"sync"
 	"time"
 
@@ -332,7 +333,7 @@ func copyHeaders(h http.Header) map[string]string {
 	result := make(map[string]string, len(h))
 	for k, v := range h {
 		if len(v) > 0 {
-			result[k] = v[0]
+			result[strings.ToLower(k)] = v[0]
 		}
 	}
 	return result

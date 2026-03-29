@@ -6,6 +6,7 @@ public class RunRequest {
     private List<String> categories;
     private int concurrency = 5;
     private int timeout = 30;
+    private boolean useAi;
 
     public RunRequest() {}
 
@@ -19,4 +20,6 @@ public class RunRequest {
     public void setConcurrency(int concurrency) { this.concurrency = concurrency; }
     public int getTimeout() { return timeout; }
     public void setTimeout(int timeout) { this.timeout = timeout; }
+    public boolean isUseAi() { return useAi; }
+    public void setUseAi(boolean useAi) { this.useAi = useAi; }
 }

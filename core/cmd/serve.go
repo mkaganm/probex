@@ -19,19 +19,41 @@ var serveCmd = &cobra.Command{
 	Long: `Start a local REST API server that SDK clients can connect to.
 
 The server exposes endpoints for scanning, running tests, and retrieving results
-that can be consumed by the JS/TS and Java SDKs.
+that can be consumed by the JS/TS, Java, and Kotlin SDKs.
+
+Use --ai to start the Python AI brain alongside the server, enabling AI-powered
+endpoints under /api/v1/ai/*. Alternatively, use --ai-url to connect to an
+externally managed brain service.
 
 Examples:
   probex serve
-  probex serve --addr localhost:9712`,
+  probex serve --addr localhost:9712
+  probex serve --ai
+  probex serve --ai-url http://localhost:9711`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		addr, _ := cmd.Flags().GetString("addr")
+		enableAI, _ := cmd.Flags().GetBool("ai")
+		aiPort, _ := cmd.Flags().GetInt("ai-port")
+		aiURL, _ := cmd.Flags().GetString("ai-url")
 
 		bold := color.New(color.Bold)
 		fmt.Println(bold.Sprint("Starting PROBEX API server..."))
-		fmt.Printf("  Listening on %s\n\n", color.CyanString("http://"+addr))
+		fmt.Printf("  Listening on %s\n", color.CyanString("http://"+addr))
 
-		srv, err := server.New(addr)
+		var opts []server.Option
+		switch {
+		case aiURL != "":
+			fmt.Printf("  AI brain:  %s (external)\n", color.GreenString(aiURL))
+			opts = append(opts, server.WithAIURL(aiURL))
+		case enableAI:
+			fmt.Printf("  AI brain:  %s (managed)\n", color.GreenString("enabled"))
+			opts = append(opts, server.WithAI(aiPort))
+		default:
+			fmt.Printf("  AI brain:  %s\n", color.YellowString("disabled (use --ai to enable)"))
+		}
+		fmt.Println()
+
+		srv, err := server.New(addr, opts...)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "Error: %v\n", err)
 			os.Exit(1)
@@ -43,7 +65,7 @@ Examples:
 
 		errCh := make(chan error, 1)
 		go func() {
-			errCh <- srv.Start()
+			errCh <- srv.Start(ctx)
 		}()
 
 		select {
@@ -60,5 +82,8 @@ Examples:
 
 func init() {
 	serveCmd.Flags().String("addr", "localhost:9712", "address to listen on")
+	serveCmd.Flags().Bool("ai", false, "start AI brain alongside the server")
+	serveCmd.Flags().Int("ai-port", 0, "AI brain port (default 9711)")
+	serveCmd.Flags().String("ai-url", "", "connect to an external AI brain URL")
 	rootCmd.AddCommand(serveCmd)
 }

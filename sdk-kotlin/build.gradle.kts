@@ -5,7 +5,6 @@ plugins {
 }
 
 group = "io.probex"
-artifactId = "probex-sdk-kotlin"
 version = "1.0.0-SNAPSHOT"
 
 repositories {

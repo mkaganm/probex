@@ -107,6 +107,7 @@ export interface RunRequest {
   categories?: string[];
   concurrency?: number;
   timeout?: number;
+  use_ai?: boolean;
 }
 
 export interface APIProfile {
@@ -119,4 +120,94 @@ export interface APIProfile {
 export interface ProbexConfig {
   serverUrl?: string;
   timeout?: number;
+}
+
+// --- AI types ---
+
+export interface AIHealthResponse {
+  status: string;
+  version: string;
+  ai_mode: string;
+  model: string;
+}
+
+export interface EndpointInfo {
+  method: string;
+  path: string;
+  base_url: string;
+  query_params?: { name: string; type: string; required: boolean }[];
+  path_params?: { name: string; type: string; required: boolean }[];
+  request_body?: Schema;
+  auth?: { type: string; location: string; key: string };
+  tags?: string[];
+}
+
+export interface ScenarioRequest {
+  endpoints: EndpointInfo[];
+  max_scenarios?: number;
+}
+
+export interface ScenarioResponse {
+  scenarios: GeneratedTestCase[];
+  model_used: string;
+  tokens_used: number;
+}
+
+export interface GeneratedTestCase {
+  name: string;
+  description: string;
+  category: string;
+  severity: string;
+  request: TestRequest;
+  assertions: Assertion[];
+  tags?: string[];
+}
+
+export interface SecurityAnalysisRequest {
+  endpoints: EndpointInfo[];
+  depth?: 'quick' | 'standard' | 'deep';
+}
+
+export interface SecurityFinding {
+  title: string;
+  description: string;
+  severity: string;
+  category: string;
+  endpoint: string;
+  evidence?: string;
+  remediation?: string;
+}
+
+export interface SecurityAnalysisResponse {
+  findings: SecurityFinding[];
+  model_used: string;
+  tokens_used: number;
+}
+
+export interface NLTestRequest {
+  description: string;
+  endpoints?: EndpointInfo[];
+}
+
+export interface NLTestResponse {
+  test_cases: GeneratedTestCase[];
+  model_used: string;
+  tokens_used: number;
+}
+
+export interface AnomalyClassifyRequest {
+  endpoint_id: string;
+  observed_status: number;
+  expected_status: number;
+  response_body?: string;
+  response_time_ms?: number;
+  baseline_time_ms?: number;
+}
+
+export interface AnomalyClassifyResponse {
+  classification: string;
+  confidence: number;
+  explanation: string;
+  severity: string;
+  model_used: string;
 }

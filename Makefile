@@ -97,6 +97,10 @@ test-all: test
 	@echo "--- Python Brain ---"
 	-cd brain && python -m pytest 2>/dev/null || echo "(skipped: pytest not configured)"
 
+## banner: Display the PROBEX ASCII banner
+banner:
+	@cd $(CORE_DIR) && go run ./tools/banner/main.go
+
 ## help: Show this help message
 help:
 	@echo "PROBEX — Zero-Test API Intelligence Engine"

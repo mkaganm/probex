@@ -59,6 +59,19 @@ class ProbexClient(
     /** Get the latest test results. */
     suspend fun getResults(): TestResult = doGet("/api/v1/results")
 
+    // --- AI endpoints ---
+
+    /** Check AI brain health. */
+    suspend fun aiHealth(): AIHealthResponse = doGet("/api/v1/ai/health")
+
+    /** Generate AI-powered test scenarios. */
+    suspend fun aiScenarios(request: ScenarioRequest): ScenarioResponse =
+        doPost("/api/v1/ai/scenarios", request)
+
+    /** Generate tests from natural language description. */
+    suspend fun aiNLToTest(request: NLTestRequest): NLTestResponse =
+        doPost("/api/v1/ai/nl-to-test", request)
+
     private suspend inline fun <reified T> doGet(path: String): T {
         val response = httpClient.get("$baseUrl$path")
         if (!response.status.isSuccess()) {

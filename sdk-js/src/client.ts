@@ -1,4 +1,10 @@
-import type { ProbexConfig, ScanRequest, RunRequest, APIProfile, RunSummary } from './types.js';
+import type {
+  ProbexConfig, ScanRequest, RunRequest, APIProfile, RunSummary,
+  AIHealthResponse, ScenarioRequest, ScenarioResponse,
+  SecurityAnalysisRequest, SecurityAnalysisResponse,
+  NLTestRequest, NLTestResponse,
+  AnomalyClassifyRequest, AnomalyClassifyResponse,
+} from './types.js';
 
 export class ProbexError extends Error {
   public readonly statusCode: number;
@@ -68,5 +74,27 @@ export class ProbexClient {
 
   async getResults(): Promise<RunSummary> {
     return this.request<RunSummary>('GET', '/api/v1/results');
+  }
+
+  // --- AI endpoints ---
+
+  async aiHealth(): Promise<AIHealthResponse> {
+    return this.request<AIHealthResponse>('GET', '/api/v1/ai/health');
+  }
+
+  async aiScenarios(request: ScenarioRequest): Promise<ScenarioResponse> {
+    return this.request<ScenarioResponse>('POST', '/api/v1/ai/scenarios', request);
+  }
+
+  async aiSecurity(request: SecurityAnalysisRequest): Promise<SecurityAnalysisResponse> {
+    return this.request<SecurityAnalysisResponse>('POST', '/api/v1/ai/security', request);
+  }
+
+  async aiNLToTest(request: NLTestRequest): Promise<NLTestResponse> {
+    return this.request<NLTestResponse>('POST', '/api/v1/ai/nl-to-test', request);
+  }
+
+  async aiAnomaly(request: AnomalyClassifyRequest): Promise<AnomalyClassifyResponse> {
+    return this.request<AnomalyClassifyResponse>('POST', '/api/v1/ai/anomaly', request);
   }
 }
