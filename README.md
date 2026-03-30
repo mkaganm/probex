@@ -10,6 +10,7 @@
 
 <p>
 <a href="https://github.com/mkaganm/probex/actions/workflows/ci.yml"><img src="https://github.com/mkaganm/probex/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+<a href="https://github.com/mkaganm/probex/releases/latest"><img src="https://img.shields.io/github/v/release/mkaganm/probex?style=flat-square&color=brightgreen" alt="Release"></a>
 <a href="https://go.dev/"><img src="https://img.shields.io/github/go-mod/go-version/mkaganm/probex?filename=core%2Fgo.mod&style=flat-square" alt="Go"></a>
 <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue?style=flat-square" alt="License"></a>
 </p>
