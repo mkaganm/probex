@@ -302,6 +302,7 @@ report:
 | | |
 |:--|:--|
 | [Getting Started](docs/getting-started.md) | Installation, first scan, quick start |
+| [Project Wiki](docs/wiki.md) | Central index to all project documentation |
 | [Architecture](docs/architecture.md) | System design, REST API reference, pipelines |
 | [Configuration](docs/configuration.md) | `probex.yaml` reference, AI modes, environment variables |
 | [Security Testing](docs/security.md) | OWASP API Top 10 test coverage |
